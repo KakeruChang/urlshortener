@@ -3,15 +3,16 @@ export async function checkURLIsValid(url: string): Promise<boolean> {
 
   try {
     new URL(url);
+    return true;
   } catch (_err) {
     return false;
   }
 
-  return fetch(url)
-    .then((response) => {
-      return response.status === 200;
-    })
-    .catch(() => {
-      return false;
-    });
+  // return fetch(url)
+  //   .then((response) => {
+  //     return response.status === 200;
+  //   })
+  //   .catch(() => {
+  //     return false;
+  //   });
 }

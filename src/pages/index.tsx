@@ -35,7 +35,13 @@ export default function Home() {
               setError("");
               const isValid = await checkURLIsValid(url);
               if (isValid) {
-                // set url to api
+                const response = await fetch("/api/createUrl", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ url }),
+                });
+                const data = await response.json();
+                console.log({ data });
               } else {
                 setError("This is not a valid url");
               }

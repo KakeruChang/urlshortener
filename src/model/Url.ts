@@ -8,7 +8,7 @@ export interface URLContent {
   originURL: string; // original url
   shortenURL: string; // new url
   times: number;
-  userID: string; // equal to the id of user
+  userID?: string; // equal to the id of user
   originOGM?: OpenGraphMetadata;
   customOGM?: OpenGraphMetadata;
 }
