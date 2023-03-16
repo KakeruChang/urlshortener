@@ -23,6 +23,8 @@ export default async function handler(
           res.redirect(303, "/");
           return;
         }
+        result.setDataValue("times", result.dataValues.times + 1);
+        result.save();
         res.redirect(303, result.dataValues.originUrl);
       } else {
         res.status(400).json({ message: "Nothing happen" });
