@@ -1,18 +1,14 @@
 import Head from "next/head";
 import Link from "next/link";
-import { Inter } from "next/font/google";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { checkURLIsValid } from "@component/util/url";
-import Tooltip, { TooltipHandle } from "@component/components/Tooltip";
-
-const inter = Inter({ subsets: ["latin"] });
+import Tooltip from "@component/components/Tooltip";
 
 export default function Home() {
   const [url, setUrl] = useState("https://www.google.com.tw/");
   const [shortUrl, setShortUrl] = useState("");
   const [error, setError] = useState("");
-
-  const tooltipRef = useRef<TooltipHandle>(null);
+  const [tooltipIsShow, setTooltipIsShow] = useState(false);
 
   const onClickHandler = useCallback(async () => {
     setError("");
@@ -35,9 +31,17 @@ export default function Home() {
   useEffect(() => {
     if (shortUrl) {
       navigator.clipboard.writeText(location.href + shortUrl);
-      tooltipRef.current?.show();
+      setTooltipIsShow(true);
     }
   }, [shortUrl]);
+
+  useEffect(() => {
+    if (tooltipIsShow) {
+      setTimeout(() => {
+        setTooltipIsShow(false);
+      }, 5000);
+    }
+  }, [tooltipIsShow]);
 
   return (
     <>
@@ -72,7 +76,7 @@ export default function Home() {
               <Link href={shortUrl} className="link link-primary">
                 {location.href + shortUrl}
               </Link>
-              <Tooltip content="copied" ref={tooltipRef}>
+              <Tooltip content="copied" isShow={tooltipIsShow}>
                 <div />
               </Tooltip>
             </div>
