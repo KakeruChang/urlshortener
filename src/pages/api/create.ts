@@ -20,7 +20,7 @@ export default async function handler(
   }
 
   if (req.method === "POST") {
-    const { user, url } = req.body as {
+    const { url } = req.body as {
       user?: User;
       url: string;
     };

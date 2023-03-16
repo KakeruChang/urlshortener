@@ -27,12 +27,6 @@ const UserSequelize = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      primaryKey: true,
-      autoIncrement: true,
-    },
   },
   {
     // Other model options go here
@@ -50,17 +44,8 @@ const UrlSequelize = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    userID: {
-      type: DataTypes.STRING,
-    },
     times: {
       type: DataTypes.INTEGER,
-    },
-    id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      primaryKey: true,
-      autoIncrement: true,
     },
   },
   {}
@@ -81,38 +66,21 @@ const OpenGraphMetadataSequelize = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    urlID: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
     isOrigin: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
     },
-    id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      primaryKey: true,
-      autoIncrement: true,
-    },
   },
   {}
 );
-UserSequelize.sync();
 
-// UrlSequelize.belongsTo(UserSequelize, {
-//   foreignKey: "userID",
-//   targetKey: "id",
-// });
+UserSequelize.hasMany(UrlSequelize);
+UrlSequelize.hasOne(OpenGraphMetadataSequelize);
 
-UrlSequelize.sync();
+UrlSequelize.belongsTo(UserSequelize);
+OpenGraphMetadataSequelize.belongsTo(UrlSequelize);
 
-// OpenGraphMetadataSequelize.belongsTo(UrlSequelize, {
-//   foreignKey: "urlID",
-//   targetKey: "id",
-// });
-
-OpenGraphMetadataSequelize.sync();
+sequelize.sync();
 
 export { UserSequelize, UrlSequelize, OpenGraphMetadataSequelize };
 
