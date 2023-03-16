@@ -1,14 +1,47 @@
 import Head from "next/head";
-import { Inter } from "next/font/google";
-import { useState } from "react";
+import Link from "next/link";
+import { useCallback, useEffect, useState } from "react";
 import { checkURLIsValid } from "@component/util/url";
-
-const inter = Inter({ subsets: ["latin"] });
+import Tooltip from "@component/components/Tooltip";
 
 export default function Home() {
   const [url, setUrl] = useState("https://www.google.com.tw/");
   const [shortUrl, setShortUrl] = useState("");
   const [error, setError] = useState("");
+  const [tooltipIsShow, setTooltipIsShow] = useState(false);
+
+  const onClickHandler = useCallback(async () => {
+    setError("");
+
+    const isValid = await checkURLIsValid(url);
+    if (isValid) {
+      const response = await fetch("/api/create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url }),
+      });
+      const data = await response.json();
+      setShortUrl(data.shortUrl);
+    } else {
+      setError("This is not a valid url");
+      setShortUrl("");
+    }
+  }, [url]);
+
+  useEffect(() => {
+    if (shortUrl) {
+      navigator.clipboard.writeText(location.href + shortUrl);
+      setTooltipIsShow(true);
+    }
+  }, [shortUrl]);
+
+  useEffect(() => {
+    if (tooltipIsShow) {
+      setTimeout(() => {
+        setTooltipIsShow(false);
+      }, 5000);
+    }
+  }, [tooltipIsShow]);
 
   return (
     <>
@@ -29,27 +62,26 @@ export default function Home() {
               setUrl(event.target.value);
             }}
           />
-          <button
-            className="btn btn-success ml-5"
-            onClick={async () => {
-              setError("");
-              const isValid = await checkURLIsValid(url);
-              if (isValid) {
-                // set url to api
-              } else {
-                setError("This is not a valid url");
-              }
-            }}
-          >
+          <button className="btn btn-success ml-5" onClick={onClickHandler}>
             Send
           </button>
         </div>
         {error ? <p className="text-error">{error}</p> : null}
-        {shortUrl ? (
-          <div className="mt-12">
-            <a className="link link-primary">{shortUrl}</a>
+        <div className="mt-12">
+          <div className="flex">
+            <p>Your short url:</p>
           </div>
-        ) : null}
+          {shortUrl ? (
+            <div className="flex items-center">
+              <Link href={shortUrl} className="link link-primary">
+                {location.href + shortUrl}
+              </Link>
+              <Tooltip content="copied" isShow={tooltipIsShow}>
+                <div />
+              </Tooltip>
+            </div>
+          ) : null}
+        </div>
       </main>
     </>
   );
