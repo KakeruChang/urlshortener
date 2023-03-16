@@ -42,11 +42,11 @@ const UserSequelize = sequelize.define(
 const UrlSequelize = sequelize.define(
   "Url",
   {
-    originURL: {
+    originUrl: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    shortenURL: {
+    shortUrl: {
       type: DataTypes.STRING,
       allowNull: false,
     },

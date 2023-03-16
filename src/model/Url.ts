@@ -5,8 +5,8 @@ interface OpenGraphMetadata {
 }
 
 export interface URLContent {
-  originURL: string; // original url
-  shortenURL: string; // new url
+  originUrl: string; // original url
+  shortUrl: string; // new url
   times: number;
   userID?: string; // equal to the id of user
   originOGM?: OpenGraphMetadata;

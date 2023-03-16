@@ -27,18 +27,18 @@ export default async function handler(
 
     const result = await UrlSequelize.findAll({
       where: {
-        originURL: url,
+        originUrl: url,
       },
     });
     if (result.length > 0) {
-      res.status(200).json({ shortUrl: result[0].shortenURL });
+      res.status(200).json({ shortUrl: result[0].shortUrl });
     } else {
       const shortUrl = getShortUrl(url);
 
       try {
         await UrlSequelize.create({
-          originURL: url,
-          shortenURL: shortUrl,
+          originUrl: url,
+          shortUrl,
           times: 0,
         });
 

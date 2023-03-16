@@ -41,7 +41,7 @@ export default function Home() {
                   body: JSON.stringify({ url }),
                 });
                 const data = await response.json();
-                console.log({ data });
+                setShortUrl(data.shortUrl);
               } else {
                 setError("This is not a valid url");
               }
@@ -53,7 +53,9 @@ export default function Home() {
         {error ? <p className="text-error">{error}</p> : null}
         {shortUrl ? (
           <div className="mt-12">
-            <a className="link link-primary">{shortUrl}</a>
+            <a className="link link-primary" href={shortUrl}>
+              {shortUrl}
+            </a>
           </div>
         ) : null}
       </main>
