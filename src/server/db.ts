@@ -1,4 +1,5 @@
-import { Sequelize, DataTypes } from "sequelize";
+import { Sequelize, DataTypes, Model, Optional } from "sequelize";
+import { URLContent } from "../model/Url";
 
 const sequelize = new Sequelize(
   "postgres",
@@ -33,7 +34,9 @@ const UserSequelize = sequelize.define(
   }
 );
 
-const UrlSequelize = sequelize.define(
+type URLAttributes = Required<URLContent>;
+
+const UrlSequelize = sequelize.define<Model<URLAttributes, URLAttributes>>(
   "Url",
   {
     originUrl: {

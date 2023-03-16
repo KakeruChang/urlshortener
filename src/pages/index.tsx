@@ -28,6 +28,7 @@ export default function Home() {
       setShortUrl(data.shortUrl);
     } else {
       setError("This is not a valid url");
+      setShortUrl("");
     }
   }, [url]);
 

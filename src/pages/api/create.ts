@@ -27,7 +27,7 @@ export default async function handler(
         },
       });
       if (result) {
-        res.status(200).json({ shortUrl: result.shortUrl });
+        res.status(200).json({ shortUrl: result.dataValues.shortUrl });
       } else {
         const shortUrl = getShortUrl(url);
 

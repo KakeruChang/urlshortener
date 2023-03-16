@@ -23,7 +23,7 @@ export default async function handler(
           res.redirect(303, "/");
           return;
         }
-        res.redirect(303, result.originUrl);
+        res.redirect(303, result.dataValues.originUrl);
       } else {
         res.status(400).json({ message: "Nothing happen" });
       }
