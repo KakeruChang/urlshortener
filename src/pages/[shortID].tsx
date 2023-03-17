@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 
 export default function ShortUrl() {
   const router = useRouter();
