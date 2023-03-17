@@ -1,5 +1,6 @@
 import { Sequelize, DataTypes, Model, Optional } from "sequelize";
 import { URLContent } from "../model/Url";
+import { User } from "../model/User";
 
 const sequelize = new Sequelize(
   "postgres",
@@ -12,7 +13,9 @@ const sequelize = new Sequelize(
   }
 );
 
-const UserSequelize = sequelize.define(
+type UserCreateAction = Optional<User, "id">;
+
+const UserSequelize = sequelize.define<Model<User, UserCreateAction>>(
   "User",
   {
     // Model attributes are defined here
@@ -27,6 +30,12 @@ const UserSequelize = sequelize.define(
     password: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true,
+      autoIncrement: true,
     },
   },
   {

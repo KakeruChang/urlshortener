@@ -52,6 +52,9 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="px-24">
+        <Link href="/login" as="/login" className="link link-primary">
+          Login
+        </Link>
         <div className="flex w-full mt-24">
           <input
             type="text"
@@ -73,7 +76,7 @@ export default function Home() {
           </div>
           {shortUrl ? (
             <div className="flex items-center">
-              <Link href={shortUrl} className="link link-primary">
+              <Link href={shortUrl} as={shortUrl} className="link link-primary">
                 {location.href + shortUrl}
               </Link>
               <Tooltip content="copied" isShow={tooltipIsShow}>

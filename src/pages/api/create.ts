@@ -16,36 +16,38 @@ export default async function handler(
     await sequelize.authenticate();
     console.log("Connection has been established successfully.");
 
-    if (req.method === "POST") {
-      const { url } = req.body as {
-        url: string;
-      };
+    if (req.method !== "POST") {
+      return res.status(405).json({ message: "Invalid request method" });
+    }
 
-      const result = await UrlSequelize.findOne({
-        where: {
-          originUrl: url,
-        },
-      });
-      if (result) {
-        res.status(200).json({ shortUrl: result.dataValues.shortUrl });
-      } else {
-        const shortUrl = getShortUrl(url);
+    const { url } = req.body as {
+      url: string;
+    };
 
-        try {
-          await UrlSequelize.create({
-            shortUrl,
-            originUrl: url,
-            times: 0,
-          });
+    const result = await UrlSequelize.findOne({
+      where: {
+        originUrl: url,
+      },
+    });
+    console.log({ result });
 
-          res.status(200).json({ shortUrl });
-        } catch (error) {
-          console.warn(error);
-          res.status(400).json({ message: "There may be some wrong" });
-        }
-      }
+    if (result) {
+      res.status(200).json({ shortUrl: result.dataValues.shortUrl });
     } else {
-      res.status(400).json({ message: "Invalid request method" });
+      const shortUrl = getShortUrl(url);
+
+      try {
+        await UrlSequelize.create({
+          shortUrl,
+          originUrl: url,
+          times: 0,
+        });
+
+        res.status(200).json({ shortUrl });
+      } catch (error) {
+        console.warn(error);
+        res.status(400).json({ message: "There may be some wrong" });
+      }
     }
   } catch (error) {
     console.error("Unable to connect to the database:", error);
