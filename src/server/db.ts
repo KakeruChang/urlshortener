@@ -1,5 +1,5 @@
 import { Sequelize, DataTypes, Model, Optional } from "sequelize";
-import { URLContent } from "../model/Url";
+import { URLContent, OpenGraphMetadataContent } from "../model/Url";
 import { User } from "../model/User";
 
 const sequelize = new Sequelize(
@@ -47,7 +47,7 @@ const UserSequelize = sequelize.define<UserTableContent>(
 
 type URLAttributes = Required<URLContent>;
 
-type URLCreateAction = Optional<URLAttributes, "UserId">;
+type URLCreateAction = Optional<URLAttributes, "UserId" | "id">;
 
 export type URLTableContent = Model<URLAttributes, URLCreateAction>;
 
@@ -68,32 +68,47 @@ const UrlSequelize = sequelize.define<URLTableContent>(
     UserId: {
       type: DataTypes.INTEGER,
     },
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+      allowNull: false,
+    },
   },
   {}
 );
 
-const OpenGraphMetadataSequelize = sequelize.define(
-  "OpenGraphMetadata",
-  {
-    title: {
-      type: DataTypes.STRING,
-      allowNull: false,
+export type OpenGraphMetadataTableContent = Model<
+  OpenGraphMetadataContent,
+  OpenGraphMetadataContent
+>;
+
+const OpenGraphMetadataSequelize =
+  sequelize.define<OpenGraphMetadataTableContent>(
+    "OpenGraphMetadata",
+    {
+      title: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      description: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      image: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      isOrigin: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+      },
+      UrlId: {
+        type: DataTypes.INTEGER,
+      },
     },
-    description: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    image: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    isOrigin: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-    },
-  },
-  {}
-);
+    {}
+  );
 
 UserSequelize.hasMany(UrlSequelize);
 UrlSequelize.hasOne(OpenGraphMetadataSequelize);

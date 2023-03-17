@@ -9,4 +9,13 @@ export interface URLContent {
   shortUrl: string; // new url
   times: number;
   UserId: number;
+  id: number;
+}
+
+export interface OpenGraphMetadataContent {
+  title: string;
+  description: string;
+  image: string;
+  isOrigin: boolean;
+  UrlId: number;
 }

@@ -3,15 +3,21 @@ import { ResponseContent } from "@component/model/Common";
 import { getShortUrl } from "@component/util/hash";
 import jwt, { Secret } from "jsonwebtoken";
 import type { NextApiRequest, NextApiResponse } from "next";
+import ogs from "open-graph-scraper";
 import sequelize, {
   UrlSequelize,
   URLTableContent,
   UserSequelize,
   UserTableContent,
+  OpenGraphMetadataSequelize,
+  OpenGraphMetadataTableContent,
 } from "../../server/db";
 
 interface CreateShortUrlResponseContent extends ResponseContent {
   short_url?: string;
+  title?: string;
+  description?: string;
+  image?: string;
 }
 
 export default async function handler(
@@ -77,6 +83,7 @@ export default async function handler(
     if (urlResult) {
       res.status(200).json({ short_url: urlResult.dataValues.shortUrl });
     } else {
+      // memo short url
       const shortUrl = getShortUrl(url);
 
       try {
@@ -96,9 +103,35 @@ export default async function handler(
           urlContent.UserId = parseInt(id, 10);
         }
 
-        await UrlSequelize.create(urlContent);
+        const urlResult = await UrlSequelize.create(urlContent);
 
-        res.status(200).json({ short_url: shortUrl });
+        let ogResult: OpenGraphMetadataTableContent | null = null;
+        // get ogData
+        try {
+          const { result: ogData } = await ogs({ url });
+          const image = ogData.ogImage;
+          ogResult = await OpenGraphMetadataSequelize.create({
+            title: ogData.ogTitle ?? "",
+            description: ogData.ogDescription ?? "",
+            image:
+              typeof image === "string"
+                ? image
+                : Array.isArray(image)
+                ? image[0].url
+                : image?.url ?? "",
+            isOrigin: true,
+            UrlId: urlResult.dataValues.id,
+          });
+        } catch (error) {
+          console.log({ error });
+        }
+
+        res.status(200).json({
+          short_url: shortUrl,
+          title: ogResult?.dataValues.title,
+          description: ogResult?.dataValues.description,
+          image: ogResult?.dataValues.image,
+        });
       } catch (error) {
         console.warn(error);
         res.status(400).json({ message: "There may be some wrong" });

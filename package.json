@@ -23,6 +23,7 @@
     "jsonwebtoken": "^9.0.0",
     "next": "13.2.4",
     "next-redux-wrapper": "^8.1.0",
+    "open-graph-scraper": "^5.2.1",
     "pg": "^8.10.0",
     "pg-hstore": "^2.3.4",
     "react": "18.2.0",
