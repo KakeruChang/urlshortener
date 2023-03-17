@@ -5,6 +5,7 @@ import jwt, { Secret } from "jsonwebtoken";
 import type { NextApiRequest, NextApiResponse } from "next";
 import sequelize, {
   UrlSequelize,
+  URLTableContent,
   UserSequelize,
   UserTableContent,
 } from "../../server/db";
@@ -56,12 +57,22 @@ export default async function handler(
       });
     }
 
-    const urlResult = await UrlSequelize.findOne({
-      where: {
-        originUrl: url,
-        UserId: user?.dataValues.id,
-      },
-    });
+    let urlResult: URLTableContent | null = null;
+
+    if (user?.dataValues.id) {
+      urlResult = await UrlSequelize.findOne({
+        where: {
+          originUrl: url,
+          UserId: user?.dataValues.id,
+        },
+      });
+    } else {
+      urlResult = await UrlSequelize.findOne({
+        where: {
+          originUrl: url,
+        },
+      });
+    }
 
     if (urlResult) {
       res.status(200).json({ short_url: urlResult.dataValues.shortUrl });

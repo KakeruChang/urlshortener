@@ -56,7 +56,7 @@ export default function Home() {
         <Link href="/login" as="/login" className="link link-primary">
           Login
         </Link>
-        {`( ${userName} )`}
+        {userName ? `( ${userName} )` : null}
         <div className="flex w-full mt-24">
           <input
             type="text"
