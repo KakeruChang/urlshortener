@@ -9,8 +9,9 @@ export async function checkURLIsValid(url: string): Promise<boolean> {
     return false;
   }
 
-  const result = (await axios.post<{ isValid: boolean }>("/check-url", { url }))
-    .data;
+  const result = (
+    await axios.post<{ is_valid: boolean }>("/check-url", { url })
+  ).data;
 
-  return !!result.isValid;
+  return !!result.is_valid;
 }

@@ -36,6 +36,9 @@ export default function LoginSignup() {
       .unwrap()
       .then(() => {
         router.push("/");
+      })
+      .catch((err) => {
+        console.warn(err);
       });
   }, [dispatch, input, mode, router]);
 

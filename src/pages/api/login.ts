@@ -2,10 +2,16 @@ import { NextApiRequest, NextApiResponse } from "next";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import sequelize, { UserSequelize } from "../../server/db";
+import { ResponseContent } from "@component/model/Common";
+
+interface LoginResponseContent extends ResponseContent {
+  token?: string;
+  name?: string;
+}
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse<LoginResponseContent>
 ) {
   if (req.method !== "POST") {
     return res.status(405).json({ message: "Invalid request method" });
@@ -30,7 +36,7 @@ export default async function handler(
 
     if (!secretKey) {
       console.error("Can not get secret key");
-      return res.status(500).json("There may be some wrong");
+      return res.status(500).json({ message: "There may be some wrong" });
     }
 
     const { id, name, account: userAccount } = user.dataValues;

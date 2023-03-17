@@ -2,7 +2,7 @@ import { ResponseContent } from "@component/model/Common";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 interface CheckUrlResponseContent extends ResponseContent {
-  isValid?: boolean;
+  is_valid?: boolean;
 }
 
 export default async function handler(
@@ -20,12 +20,12 @@ export default async function handler(
   if (url) {
     try {
       const response = await fetch(url);
-      res.status(200).json({ isValid: response.status === 200 });
+      res.status(200).json({ is_valid: response.status === 200 });
     } catch (error) {
       console.warn(error);
-      res.status(200).json({ isValid: false });
+      res.status(200).json({ is_valid: false });
     }
   } else {
-    res.status(200).json({ isValid: false });
+    res.status(200).json({ is_valid: false });
   }
 }

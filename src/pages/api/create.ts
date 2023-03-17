@@ -3,10 +3,14 @@ import { ResponseContent } from "@component/model/Common";
 import { getShortUrl } from "@component/util/hash";
 import jwt, { Secret } from "jsonwebtoken";
 import type { NextApiRequest, NextApiResponse } from "next";
-import sequelize, { UrlSequelize, UserSequelize } from "../../server/db";
+import sequelize, {
+  UrlSequelize,
+  UserSequelize,
+  UserTableContent,
+} from "../../server/db";
 
 interface CreateShortUrlResponseContent extends ResponseContent {
-  shortUrl?: string;
+  short_url?: string;
 }
 
 export default async function handler(
@@ -42,11 +46,15 @@ export default async function handler(
       }
     }
 
-    const user = await UserSequelize.findOne({
-      where: {
-        account: accountFromToken,
-      },
-    });
+    let user: UserTableContent | null = null;
+
+    if (accountFromToken) {
+      user = await UserSequelize.findOne({
+        where: {
+          account: accountFromToken,
+        },
+      });
+    }
 
     const urlResult = await UrlSequelize.findOne({
       where: {
@@ -56,7 +64,7 @@ export default async function handler(
     });
 
     if (urlResult) {
-      res.status(200).json({ shortUrl: urlResult.dataValues.shortUrl });
+      res.status(200).json({ short_url: urlResult.dataValues.shortUrl });
     } else {
       const shortUrl = getShortUrl(url);
 
@@ -79,7 +87,7 @@ export default async function handler(
 
         await UrlSequelize.create(urlContent);
 
-        res.status(200).json({ shortUrl });
+        res.status(200).json({ short_url: shortUrl });
       } catch (error) {
         console.warn(error);
         res.status(400).json({ message: "There may be some wrong" });

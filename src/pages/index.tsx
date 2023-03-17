@@ -19,10 +19,10 @@ export default function Home() {
 
     const isValid = await checkURLIsValid(url);
     if (isValid) {
-      const response = await axios.post<{ shortUrl: string }>("/create", {
+      const response = await axios.post<{ short_url: string }>("/create", {
         url,
       });
-      setShortUrl(response.data.shortUrl);
+      setShortUrl(response.data.short_url);
     } else {
       setError("This is not a valid url");
       setShortUrl("");

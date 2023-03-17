@@ -15,7 +15,9 @@ const sequelize = new Sequelize(
 
 type UserCreateAction = Optional<User, "id">;
 
-const UserSequelize = sequelize.define<Model<User, UserCreateAction>>(
+export type UserTableContent = Model<User, UserCreateAction>;
+
+const UserSequelize = sequelize.define<UserTableContent>(
   "User",
   {
     // Model attributes are defined here
