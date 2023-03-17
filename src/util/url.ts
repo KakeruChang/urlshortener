@@ -1,3 +1,5 @@
+import axios from "@component/axios";
+
 export async function checkURLIsValid(url: string): Promise<boolean> {
   if (typeof url !== "string") return false;
 
@@ -6,13 +8,10 @@ export async function checkURLIsValid(url: string): Promise<boolean> {
   } catch (_err) {
     return false;
   }
-  const response = await fetch("/api/check-url", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ url }),
-  });
 
-  const result = await response.json();
+  const result = (
+    await axios.post<{ is_valid: boolean }>("/check-url", { url })
+  ).data;
 
-  return !!result.isValid;
+  return !!result.is_valid;
 }

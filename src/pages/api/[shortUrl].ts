@@ -8,29 +8,28 @@ export default async function handler(
 ) {
   try {
     await sequelize.authenticate();
-    console.log("Connection has been established successfully.");
 
-    if (req.method === "GET") {
-      const { shortUrl } = req.query;
+    if (req.method !== "GET") {
+      return res.status(405).json({ message: "Invalid request method" });
+    }
 
-      if (shortUrl) {
-        const result = await UrlSequelize.findOne({
-          where: {
-            shortUrl,
-          },
-        });
-        if (!result) {
-          res.redirect(303, "/");
-          return;
-        }
-        res.redirect(303, result.dataValues.originUrl);
-      } else {
-        res.status(400).json({ message: "Nothing happen" });
+    const { shortUrl } = req.query;
+
+    if (shortUrl) {
+      const result = await UrlSequelize.findOne({
+        where: {
+          shortUrl,
+        },
+      });
+      if (!result) {
+        res.redirect(303, "/");
+        return;
       }
-
-      // }
+      result.setDataValue("times", result.dataValues.times + 1);
+      result.save();
+      res.redirect(303, result.dataValues.originUrl);
     } else {
-      res.status(400).json({ message: "Invalid request method" });
+      res.status(400).json({ message: "Nothing happen" });
     }
   } catch (error) {
     console.error("Unable to connect to the database:", error);

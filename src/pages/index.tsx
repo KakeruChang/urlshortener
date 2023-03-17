@@ -1,10 +1,14 @@
+import axios from "@component/axios";
+import Tooltip from "@component/components/Tooltip";
+import { selectUserName } from "@component/reducer/User";
+import { checkURLIsValid } from "@component/util/url";
 import Head from "next/head";
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
-import { checkURLIsValid } from "@component/util/url";
-import Tooltip from "@component/components/Tooltip";
+import { useSelector } from "react-redux";
 
 export default function Home() {
+  const userName = useSelector(selectUserName);
   const [url, setUrl] = useState("https://www.google.com.tw/");
   const [shortUrl, setShortUrl] = useState("");
   const [error, setError] = useState("");
@@ -15,13 +19,10 @@ export default function Home() {
 
     const isValid = await checkURLIsValid(url);
     if (isValid) {
-      const response = await fetch("/api/create", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url }),
+      const response = await axios.post<{ short_url: string }>("/create", {
+        url,
       });
-      const data = await response.json();
-      setShortUrl(data.shortUrl);
+      setShortUrl(response.data.short_url);
     } else {
       setError("This is not a valid url");
       setShortUrl("");
@@ -52,6 +53,10 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="px-24">
+        <Link href="/login" as="/login" className="link link-primary">
+          Login
+        </Link>
+        {userName ? `( ${userName} )` : null}
         <div className="flex w-full mt-24">
           <input
             type="text"
@@ -73,7 +78,7 @@ export default function Home() {
           </div>
           {shortUrl ? (
             <div className="flex items-center">
-              <Link href={shortUrl} className="link link-primary">
+              <Link href={shortUrl} as={shortUrl} className="link link-primary">
                 {location.href + shortUrl}
               </Link>
               <Tooltip content="copied" isShow={tooltipIsShow}>
