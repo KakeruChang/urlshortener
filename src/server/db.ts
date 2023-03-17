@@ -3,7 +3,7 @@ import { URLContent } from "../model/Url";
 import { User } from "../model/User";
 
 const sequelize = new Sequelize(
-  "postgres",
+  process.env.DB_NAME ?? "",
   process.env.DB_USER ?? "",
   process.env.DB_PASS,
   {

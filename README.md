@@ -22,9 +22,8 @@ After entering a URL directly into the input and clicking the send button, a sho
 
 - Validating URL.
 - Automatically copying shortened URL to clipboard.
+- Sign up and log in.
 
-## Deploy on Vercel
+## Run
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+[You can try using this service at this link.](https://url-shortener-6owq.onrender.com/)
