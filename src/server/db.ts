@@ -45,7 +45,11 @@ const UserSequelize = sequelize.define<Model<User, UserCreateAction>>(
 
 type URLAttributes = Required<URLContent>;
 
-const UrlSequelize = sequelize.define<Model<URLAttributes, URLAttributes>>(
+type URLCreateAction = Optional<URLAttributes, "UserId">;
+
+export type URLTableContent = Model<URLAttributes, URLCreateAction>;
+
+const UrlSequelize = sequelize.define<URLTableContent>(
   "Url",
   {
     originUrl: {
@@ -57,6 +61,9 @@ const UrlSequelize = sequelize.define<Model<URLAttributes, URLAttributes>>(
       allowNull: false,
     },
     times: {
+      type: DataTypes.INTEGER,
+    },
+    UserId: {
       type: DataTypes.INTEGER,
     },
   },
@@ -89,7 +96,12 @@ const OpenGraphMetadataSequelize = sequelize.define(
 UserSequelize.hasMany(UrlSequelize);
 UrlSequelize.hasOne(OpenGraphMetadataSequelize);
 
-UrlSequelize.belongsTo(UserSequelize);
+UrlSequelize.belongsTo(UserSequelize, {
+  foreignKey: {
+    allowNull: true,
+    name: "UserId",
+  },
+});
 OpenGraphMetadataSequelize.belongsTo(UrlSequelize);
 
 sequelize.sync();

@@ -1,8 +1,9 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import { ResponseContent } from "@component/model/Common";
 import { getShortUrl } from "@component/util/hash";
+import jwt, { Secret } from "jsonwebtoken";
 import type { NextApiRequest, NextApiResponse } from "next";
-import sequelize, { UrlSequelize } from "../../server/db";
+import sequelize, { UrlSequelize, UserSequelize } from "../../server/db";
 
 interface CreateShortUrlResponseContent extends ResponseContent {
   shortUrl?: string;
@@ -24,24 +25,59 @@ export default async function handler(
       url: string;
     };
 
-    const result = await UrlSequelize.findOne({
+    const token = req.headers.authorization?.split(" ")[1];
+    const secretKey = process.env.JWT_SECRET_KEY;
+
+    let accountFromToken = "";
+
+    if (token) {
+      try {
+        const decoded = jwt.verify(token, secretKey as Secret);
+
+        if (decoded && typeof decoded === "object" && "account" in decoded) {
+          accountFromToken = decoded.account;
+        }
+      } catch (err) {
+        console.warn("decoded fail", err);
+      }
+    }
+
+    const user = await UserSequelize.findOne({
       where: {
-        originUrl: url,
+        account: accountFromToken,
       },
     });
-    console.log({ result });
 
-    if (result) {
-      res.status(200).json({ shortUrl: result.dataValues.shortUrl });
+    const urlResult = await UrlSequelize.findOne({
+      where: {
+        originUrl: url,
+        UserId: user?.dataValues.id,
+      },
+    });
+
+    if (urlResult) {
+      res.status(200).json({ shortUrl: urlResult.dataValues.shortUrl });
     } else {
       const shortUrl = getShortUrl(url);
 
       try {
-        await UrlSequelize.create({
+        const id = user?.dataValues.id;
+        const urlContent: {
+          shortUrl: string;
+          originUrl: string;
+          times: number;
+          UserId: number | undefined;
+        } = {
           shortUrl,
           originUrl: url,
           times: 0,
-        });
+          UserId: undefined,
+        };
+        if (id && Number.isInteger(parseInt(id, 10))) {
+          urlContent.UserId = parseInt(id, 10);
+        }
+
+        await UrlSequelize.create(urlContent);
 
         res.status(200).json({ shortUrl });
       } catch (error) {

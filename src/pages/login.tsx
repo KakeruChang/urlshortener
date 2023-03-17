@@ -6,12 +6,14 @@ import { loginThunk } from "@component/thunks/UserThunk";
 import classNames from "classnames";
 import Head from "next/head";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 import { useSelector } from "react-redux";
 
 const modeList: Mode[] = ["login", "signup"];
 
 export default function LoginSignup() {
+  const router = useRouter();
   const dispatch = useAppDispatch();
   const [mode, setMode] = useState<Mode>("login");
   const [input, setInput] = useState<InputContent>({
@@ -30,8 +32,12 @@ export default function LoginSignup() {
         mode,
         input,
       })
-    );
-  }, [dispatch, input, mode]);
+    )
+      .unwrap()
+      .then(() => {
+        router.push("/");
+      });
+  }, [dispatch, input, mode, router]);
 
   return (
     <>

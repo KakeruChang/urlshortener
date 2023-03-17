@@ -16,6 +16,7 @@ export default async function handler(
     const { account, password } = req.body;
 
     const user = await UserSequelize.findOne({ where: { account } });
+
     if (!user) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
@@ -32,11 +33,13 @@ export default async function handler(
       return res.status(500).json("There may be some wrong");
     }
 
-    const token = jwt.sign({ id: user.dataValues.id }, secretKey, {
+    const { id, name, account: userAccount } = user.dataValues;
+
+    const token = jwt.sign({ id, account: userAccount }, secretKey, {
       expiresIn: "1h",
     });
 
-    return res.status(200).json({ token });
+    return res.status(200).json({ token, name: name ?? userAccount });
   } catch (error) {
     console.error("Unable to connect to the database:", error);
   }
