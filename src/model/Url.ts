@@ -19,3 +19,9 @@ export interface OpenGraphMetadataContent {
   isOrigin: boolean;
   UrlId: number;
 }
+
+export interface OGContent {
+  title?: string;
+  description?: string;
+  image?: string;
+}

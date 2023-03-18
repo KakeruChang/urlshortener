@@ -1,3 +1,4 @@
+import { OGContent } from "@component/model/Url";
 import sequelize, {
   OpenGraphMetadataSequelize,
   UrlSequelize,
@@ -6,12 +7,6 @@ import { GetServerSideProps } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-
-interface OGContent {
-  title: string | undefined;
-  description: string | undefined;
-  image: string | undefined;
-}
 
 export default function ShortUrl({ title, description, image }: OGContent) {
   const router = useRouter();
@@ -39,7 +34,7 @@ export default function ShortUrl({ title, description, image }: OGContent) {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { shortID } = context.query;
 
-  let ogData: OGContent = {
+  const ogData: OGContent = {
     title: undefined,
     description: undefined,
     image: undefined,
@@ -70,10 +65,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 
   return {
-    props: {
-      title: ogData.title,
-      description: ogData.description,
-      image: ogData.image,
-    },
+    props: ogData,
   };
 };

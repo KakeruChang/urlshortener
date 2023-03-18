@@ -1,5 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import { ResponseContent } from "@component/model/Common";
+import { OGContent } from "@component/model/Url";
 import { getShortUrl } from "@component/util/hash";
 import jwt, { Secret } from "jsonwebtoken";
 import type { NextApiRequest, NextApiResponse } from "next";
@@ -13,11 +14,8 @@ import sequelize, {
   OpenGraphMetadataTableContent,
 } from "../../server/db";
 
-interface CreateShortUrlResponseContent extends ResponseContent {
+interface CreateShortUrlResponseContent extends ResponseContent, OGContent {
   short_url?: string;
-  title?: string;
-  description?: string;
-  image?: string;
 }
 
 export default async function handler(
@@ -87,14 +85,12 @@ export default async function handler(
             UrlId: urlResult.dataValues.id,
           },
         });
-        res
-          .status(200)
-          .json({
-            short_url: urlResult.dataValues.shortUrl,
-            title: ogResult?.dataValues.title,
-            description: ogResult?.dataValues.description,
-            image: ogResult?.dataValues.image,
-          });
+        res.status(200).json({
+          short_url: urlResult.dataValues.shortUrl,
+          title: ogResult?.dataValues.title,
+          description: ogResult?.dataValues.description,
+          image: ogResult?.dataValues.image,
+        });
       } catch (error) {
         console.warn({ error });
         res.status(200).json({ short_url: urlResult.dataValues.shortUrl });
