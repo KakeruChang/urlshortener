@@ -81,7 +81,24 @@ export default async function handler(
     }
 
     if (urlResult) {
-      res.status(200).json({ short_url: urlResult.dataValues.shortUrl });
+      try {
+        const ogResult = await OpenGraphMetadataSequelize.findOne({
+          where: {
+            UrlId: urlResult.dataValues.id,
+          },
+        });
+        res
+          .status(200)
+          .json({
+            short_url: urlResult.dataValues.shortUrl,
+            title: ogResult?.dataValues.title,
+            description: ogResult?.dataValues.description,
+            image: ogResult?.dataValues.image,
+          });
+      } catch (error) {
+        console.warn({ error });
+        res.status(200).json({ short_url: urlResult.dataValues.shortUrl });
+      }
     } else {
       // memo short url
       const shortUrl = getShortUrl(url);
@@ -123,7 +140,7 @@ export default async function handler(
             UrlId: urlResult.dataValues.id,
           });
         } catch (error) {
-          console.log({ error });
+          console.warn({ error });
         }
 
         res.status(200).json({

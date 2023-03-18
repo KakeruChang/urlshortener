@@ -1,5 +1,5 @@
 diff --git a/node_modules/open-graph-scraper/lib/extract.ts b/node_modules/open-graph-scraper/lib/extract.ts
-index c50dcfd..b817886 100644
+index c50dcfd..d8d7267 100644
 --- a/node_modules/open-graph-scraper/lib/extract.ts
 +++ b/node_modules/open-graph-scraper/lib/extract.ts
 @@ -1,3 +1,4 @@
@@ -7,25 +7,6 @@ index c50dcfd..b817886 100644
  import { load } from 'cheerio';
  
  import fallback from './fallback';
-@@ -18,6 +19,9 @@ import type { OgObject, OpenGraphScraperOptions } from './types';
- export default function extractMetaTags(body: string, options: OpenGraphScraperOptions, rawBody) {
-   let ogObject: OgObject = {};
-   const $ = load(body);
-+
-+  if(!options.customMetaTags) return ogObject
-+
-   const metaFields = fields.concat(options.customMetaTags);
- 
-   // find all of the open graph info in the meta tags
-@@ -27,7 +31,7 @@ export default function extractMetaTags(body: string, options: OpenGraphScraperO
-     const content = meta.attribs.content || meta.attribs.value;
-     metaFields.forEach((item) => {
-       if (item && property.toLowerCase() === item.property.toLowerCase()) {
--        if (!item.multiple) {
-+        if (!item.multiple && item.fieldName in ogObject) {
-           ogObject[item.fieldName] = content;
-         } else if (!ogObject[item.fieldName]) {
-           ogObject[item.fieldName] = [content];
 diff --git a/node_modules/open-graph-scraper/lib/fallback.ts b/node_modules/open-graph-scraper/lib/fallback.ts
 index 6b7def4..ef8fe24 100644
 --- a/node_modules/open-graph-scraper/lib/fallback.ts

@@ -7,22 +7,38 @@ import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
+interface ShortUrlOgContent {
+  title?: string;
+  image?: string;
+  description?: string;
+}
+
 export default function Home() {
   const userName = useSelector(selectUserName);
+
   const [url, setUrl] = useState("https://www.google.com.tw/");
   const [shortUrl, setShortUrl] = useState("");
   const [error, setError] = useState("");
   const [tooltipIsShow, setTooltipIsShow] = useState(false);
+  const [ogData, setOgData] = useState<ShortUrlOgContent>({});
 
   const onClickHandler = useCallback(async () => {
     setError("");
 
     const isValid = await checkURLIsValid(url);
     if (isValid) {
-      const response = await axios.post<{ short_url: string }>("/create", {
+      const { data } = await axios.post<
+        { short_url: string } & ShortUrlOgContent
+      >("/create", {
         url,
       });
-      setShortUrl(response.data.short_url);
+
+      setShortUrl(data.short_url);
+      setOgData({
+        title: data.title,
+        description: data.description,
+        image: data.image,
+      });
     } else {
       setError("This is not a valid url");
       setShortUrl("");
@@ -77,14 +93,30 @@ export default function Home() {
             <p>Your short url:</p>
           </div>
           {shortUrl ? (
-            <div className="flex items-center">
-              <Link href={shortUrl} as={shortUrl} className="link link-primary">
-                {location.href + shortUrl}
-              </Link>
-              <Tooltip content="copied" isShow={tooltipIsShow}>
-                <div />
-              </Tooltip>
-            </div>
+            <>
+              <div className="flex items-center">
+                <Link
+                  href={shortUrl}
+                  as={shortUrl}
+                  className="link link-primary"
+                >
+                  {location.href + shortUrl}
+                </Link>
+                <Tooltip content="copied" isShow={tooltipIsShow}>
+                  <div />
+                </Tooltip>
+              </div>
+              <div className="card w-96 bg-base-100 shadow-xl mt-12">
+                <figure>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={ogData.image} alt={ogData.title} />
+                </figure>
+                <div className="card-body">
+                  <h2 className="card-title">{ogData.title}</h2>
+                  <p>{ogData.description}</p>
+                </div>
+              </div>
+            </>
           ) : null}
         </div>
       </main>
