@@ -1,6 +1,6 @@
 import TextInput from "@component/components/TextInput";
 import { Mode, InputContent } from "@component/model/User";
-import { selectUserError } from "@component/reducer/User";
+import { selectProfileData } from "@component/reducer/User";
 import { useAppDispatch } from "@component/store";
 import { loginThunk } from "@component/thunks/UserThunk";
 import classNames from "classnames";
@@ -21,7 +21,7 @@ export default function LoginSignup() {
     password: "",
     name: "",
   });
-  const error = useSelector(selectUserError);
+  const error = useSelector(selectProfileData).error;
 
   const submitHandler = useCallback(async () => {
     if (!input.account || !input.password) {

@@ -1,6 +1,6 @@
 import axios from "@component/axios";
 import Tooltip from "@component/components/Tooltip";
-import { selectUserName } from "@component/reducer/User";
+import { selectProfileData } from "@component/reducer/User";
 import { checkURLIsValid } from "@component/util/url";
 import Head from "next/head";
 import Link from "next/link";
@@ -14,7 +14,7 @@ interface ShortUrlOgContent {
 }
 
 export default function Home() {
-  const userName = useSelector(selectUserName);
+  const profile = useSelector(selectProfileData);
 
   const [url, setUrl] = useState("https://www.google.com.tw/");
   const [shortUrl, setShortUrl] = useState("");
@@ -72,7 +72,7 @@ export default function Home() {
         <Link href="/login" as="/login" className="link link-primary">
           Login
         </Link>
-        {userName ? `( ${userName} )` : null}
+        {profile ? `( ${profile.name} )` : null}
         <div className="flex w-full mt-24">
           <input
             type="text"

@@ -25,3 +25,7 @@ export interface OGContent {
   description?: string;
   image?: string;
 }
+
+export interface MemberUrlContent extends OGContent {
+  shortUrl: string;
+}

@@ -1,8 +1,8 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import { ResponseContent } from "@component/model/Common";
 import { OGContent } from "@component/model/Url";
+import { getAccountFromToken } from "@component/util/decode";
 import { getShortUrl } from "@component/util/hash";
-import jwt, { Secret } from "jsonwebtoken";
 import type { NextApiRequest, NextApiResponse } from "next";
 import ogs from "open-graph-scraper";
 import sequelize, {
@@ -24,7 +24,6 @@ export default async function handler(
 ) {
   try {
     await sequelize.authenticate();
-    console.log("Connection has been established successfully.");
 
     if (req.method !== "POST") {
       return res.status(405).json({ message: "Invalid request method" });
@@ -34,22 +33,7 @@ export default async function handler(
       url: string;
     };
 
-    const token = req.headers.authorization?.split(" ")[1];
-    const secretKey = process.env.JWT_SECRET_KEY;
-
-    let accountFromToken = "";
-
-    if (token) {
-      try {
-        const decoded = jwt.verify(token, secretKey as Secret);
-
-        if (decoded && typeof decoded === "object" && "account" in decoded) {
-          accountFromToken = decoded.account;
-        }
-      } catch (err) {
-        console.warn("decoded fail", err);
-      }
-    }
+    const accountFromToken = getAccountFromToken(req);
 
     let user: UserTableContent | null = null;
 

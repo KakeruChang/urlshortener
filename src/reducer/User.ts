@@ -1,17 +1,37 @@
 import { SelectorRootState } from "@component/model/Common";
-import { loginThunk } from "@component/thunks/UserThunk";
+import { MemberUrlContent } from "@component/model/Url";
+import {
+  deleteShortUrlThunk,
+  getShortUrlsThunk,
+  loginThunk,
+} from "@component/thunks/UserThunk";
 import { createSlice } from "@reduxjs/toolkit";
 
-export interface UserState {
+interface MemberContent {
+  urls: MemberUrlContent[];
+  error: string;
+}
+
+interface ProfileContent {
   name: string;
   token: string;
   error: string;
 }
+export interface UserState {
+  profile: ProfileContent;
+  member: MemberContent;
+}
 
 const initialState: UserState = {
-  name: "",
-  token: "",
-  error: "",
+  profile: {
+    name: "",
+    token: "",
+    error: "",
+  },
+  member: {
+    urls: [],
+    error: "",
+  },
 };
 
 export const userSlice = createSlice({
@@ -20,16 +40,45 @@ export const userSlice = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder
+      .addCase(loginThunk.pending, (state) => {
+        state.profile.error = "";
+      })
       .addCase(loginThunk.fulfilled, (state, { payload }) => {
-        state.token = payload.token;
-        state.name = payload.name;
-        state.error = "";
+        state.profile.token = payload.token;
+        state.profile.name = payload.name;
+        state.profile.error = "";
       })
       .addCase(loginThunk.rejected, (state, { payload }) => {
         if (typeof payload === "string") {
-          state.error = payload;
+          state.profile.error = payload;
         } else {
-          state.error = "Some error happened.";
+          state.profile.error = "Some error happened at loginThunk.";
+        }
+      })
+      .addCase(getShortUrlsThunk.pending, (state) => {
+        state.member.error = "";
+      })
+      .addCase(getShortUrlsThunk.fulfilled, (state, { payload }) => {
+        state.member.urls = payload.urls;
+      })
+      .addCase(getShortUrlsThunk.rejected, (state, { payload }) => {
+        if (typeof payload === "string") {
+          state.member.error = payload;
+        } else {
+          state.member.error = "Some error happened at getShortUrlsThunk.";
+        }
+      })
+      .addCase(deleteShortUrlThunk.pending, (state) => {
+        state.member.error = "";
+      })
+      .addCase(deleteShortUrlThunk.fulfilled, (state, { payload }) => {
+        state.member.urls = payload.urls;
+      })
+      .addCase(deleteShortUrlThunk.rejected, (state, { payload }) => {
+        if (typeof payload === "string") {
+          state.member.error = payload;
+        } else {
+          state.member.error = "Some error happened at deleteShortUrlThunk.";
         }
       });
   },
@@ -39,10 +88,10 @@ export default userSlice.reducer;
 
 export type SelectorState = SelectorRootState<UserState, "user">;
 
-export function selectUserName(state: SelectorState): string {
-  return state.user.name;
+export function selectProfileData(state: SelectorState): ProfileContent {
+  return state.user.profile;
 }
 
-export function selectUserError(state: SelectorState): string {
-  return state.user.error;
+export function selectMemberData(state: SelectorState): MemberContent {
+  return state.user.member;
 }
