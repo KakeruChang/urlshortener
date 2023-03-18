@@ -2,6 +2,7 @@ import axios from "@component/axios";
 import Tooltip from "@component/components/Tooltip";
 import { selectProfileData } from "@component/reducer/User";
 import { checkURLIsValid } from "@component/util/url";
+import classNames from "classnames";
 import Head from "next/head";
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
@@ -108,8 +109,13 @@ export default function Home() {
               </div>
               <div className="card w-96 bg-base-100 shadow-xl mt-12">
                 <figure>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={ogData.image} alt={ogData.title} />
+                  <div
+                    className={classNames(
+                      "w-[600px] h-[400px]",
+                      "bg-no-repeat bg-contain"
+                    )}
+                    style={{ backgroundImage: `url(${ogData.image})` }}
+                  />
                 </figure>
                 <div className="card-body">
                   <h2 className="card-title">{ogData.title}</h2>

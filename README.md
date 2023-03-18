@@ -23,8 +23,10 @@ After entering a URL directly into the input and clicking the send button, a sho
 - Validating URL.
 - Automatically copying shortened URL to clipboard.
 - Sign up and log in.
-- Displaying Open Graph Metadata for the Original URL.
-- Displaying Preview Information when Generating Short URL.
+- Displaying Open Graph Metadata for the original URL.
+- Displaying Preview Information when generating short URL.
+- Delete short URL.
+- Edit Open Graph Metadata for the short URL.
 
 ## Run
 

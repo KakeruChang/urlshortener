@@ -2,6 +2,7 @@ import { ResponseContent } from "@component/model/Common";
 import sequelize from "@component/server/db";
 import {
   getUrlWithOgByAccount,
+  updateOgData,
   URLJoinObContent,
 } from "@component/server/method";
 import { getAccountFromToken } from "@component/util/decode";
@@ -26,7 +27,16 @@ export default async function handler(
 
         return res.status(200).json({ urls });
       } else if (req.method === "PUT") {
-        // update og data
+        const { shortUrl, title, description, image } = req.body;
+        const urls = await updateOgData({
+          accountFromToken,
+          shortUrl,
+          title,
+          description,
+          image,
+        });
+
+        return res.status(200).json({ urls });
       }
       return res
         .status(405)

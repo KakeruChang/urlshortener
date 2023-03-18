@@ -70,3 +70,24 @@ export const deleteShortUrlThunk = createAsyncThunk<
     return context.rejectWithValue((error as Error)?.message);
   }
 });
+
+interface UpdateOgDataThunkParams {
+  shortUrl: string;
+  title: string;
+  description: string;
+  image: string;
+}
+
+export const updateOgDataThunk = createAsyncThunk<
+  GetShortUrlsApiResult,
+  UpdateOgDataThunkParams
+>("updateOgData", async (args, context) => {
+  try {
+    const response = await axios.put<GetShortUrlsApiResult>("/member", args);
+
+    return response.data;
+  } catch (error) {
+    console.warn("updateOgDataThunk error", error);
+    return context.rejectWithValue((error as Error)?.message);
+  }
+});

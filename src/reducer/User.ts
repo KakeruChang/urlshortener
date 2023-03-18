@@ -4,6 +4,7 @@ import {
   deleteShortUrlThunk,
   getShortUrlsThunk,
   loginThunk,
+  updateOgDataThunk,
 } from "@component/thunks/UserThunk";
 import { createSlice } from "@reduxjs/toolkit";
 
@@ -79,6 +80,19 @@ export const userSlice = createSlice({
           state.member.error = payload;
         } else {
           state.member.error = "Some error happened at deleteShortUrlThunk.";
+        }
+      })
+      .addCase(updateOgDataThunk.pending, (state) => {
+        state.member.error = "";
+      })
+      .addCase(updateOgDataThunk.fulfilled, (state, { payload }) => {
+        state.member.urls = payload.urls;
+      })
+      .addCase(updateOgDataThunk.rejected, (state, { payload }) => {
+        if (typeof payload === "string") {
+          state.member.error = payload;
+        } else {
+          state.member.error = "Some error happened at updateOgDataThunk.";
         }
       });
   },
