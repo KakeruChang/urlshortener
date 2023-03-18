@@ -1,0 +1,54 @@
+diff --git a/node_modules/open-graph-scraper/lib/extract.ts b/node_modules/open-graph-scraper/lib/extract.ts
+index c50dcfd..d8d7267 100644
+--- a/node_modules/open-graph-scraper/lib/extract.ts
++++ b/node_modules/open-graph-scraper/lib/extract.ts
+@@ -1,3 +1,4 @@
++// @ts-nocheck
+ import { load } from 'cheerio';
+ 
+ import fallback from './fallback';
+diff --git a/node_modules/open-graph-scraper/lib/fallback.ts b/node_modules/open-graph-scraper/lib/fallback.ts
+index 6b7def4..ef8fe24 100644
+--- a/node_modules/open-graph-scraper/lib/fallback.ts
++++ b/node_modules/open-graph-scraper/lib/fallback.ts
+@@ -1,3 +1,4 @@
++// @ts-nocheck
+ import chardet from 'chardet';
+ import { findImageTypeFromUrl, isImageTypeValid, isUrlValid } from './utils';
+ import type { OpenGraphScraperOptions } from './types';
+diff --git a/node_modules/open-graph-scraper/lib/media.ts b/node_modules/open-graph-scraper/lib/media.ts
+index 4a38ec8..15a3c46 100644
+--- a/node_modules/open-graph-scraper/lib/media.ts
++++ b/node_modules/open-graph-scraper/lib/media.ts
+@@ -1,3 +1,4 @@
++// @ts-nocheck
+ import fields from './fields';
+ import type {
+   ImageObject,
+diff --git a/node_modules/open-graph-scraper/lib/openGraphScraper.ts b/node_modules/open-graph-scraper/lib/openGraphScraper.ts
+index 4155fc4..c797dd7 100644
+--- a/node_modules/open-graph-scraper/lib/openGraphScraper.ts
++++ b/node_modules/open-graph-scraper/lib/openGraphScraper.ts
+@@ -1,3 +1,4 @@
++// @ts-nocheck
+ import extractMetaTags from './extract';
+ import requestAndResultsFormatter from './request';
+ import * as utils from './utils';
+diff --git a/node_modules/open-graph-scraper/lib/request.ts b/node_modules/open-graph-scraper/lib/request.ts
+index d93e348..aa3b7cf 100644
+--- a/node_modules/open-graph-scraper/lib/request.ts
++++ b/node_modules/open-graph-scraper/lib/request.ts
+@@ -1,3 +1,4 @@
++// @ts-nocheck
+ import chardet from 'chardet';
+ import { decode } from 'iconv-lite';
+ 
+diff --git a/node_modules/open-graph-scraper/lib/utils.ts b/node_modules/open-graph-scraper/lib/utils.ts
+index 1b95810..0e12cf9 100644
+--- a/node_modules/open-graph-scraper/lib/utils.ts
++++ b/node_modules/open-graph-scraper/lib/utils.ts
+@@ -1,3 +1,4 @@
++// @ts-nocheck
+ import validator from 'validator';
+ import type { ValidatorSettings, OpenGraphScraperOptions } from './types';
+ 
