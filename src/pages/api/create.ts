@@ -1,18 +1,10 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import { ResponseContent } from "@/model/Common";
 import { OGContent } from "@/model/Url";
-import sequelize, {
-  UrlSequelize,
-  URLTableContent,
-  UserSequelize,
-  UserTableContent,
-  OpenGraphMetadataSequelize,
-  OpenGraphMetadataTableContent,
-} from "@/server/db";
+import sequelize from "@/server/db";
+import { createShortUrl, findOgData, findUrl, findUser } from "@/server/method";
 import { getAccountFromToken } from "@/util/decode";
-import { getShortUrl } from "@/util/hash";
 import type { NextApiRequest, NextApiResponse } from "next";
-import ogs from "open-graph-scraper";
 
 interface CreateShortUrlResponseContent extends ResponseContent, OGContent {
   short_url?: string;
@@ -34,104 +26,24 @@ export default async function handler(
     };
 
     const accountFromToken = getAccountFromToken(req);
-
-    let user: UserTableContent | null = null;
-
-    if (accountFromToken) {
-      user = await UserSequelize.findOne({
-        where: {
-          account: accountFromToken,
-        },
-      });
-    }
-
-    let urlResult: URLTableContent | null = null;
-
-    if (user?.dataValues.id) {
-      urlResult = await UrlSequelize.findOne({
-        where: {
-          originUrl: url,
-          UserId: user?.dataValues.id,
-        },
-      });
-    } else {
-      urlResult = await UrlSequelize.findOne({
-        where: {
-          originUrl: url,
-        },
-      });
-    }
+    const user = await findUser(accountFromToken);
+    const urlResult = await findUrl(url, user?.dataValues.id);
 
     if (urlResult) {
-      try {
-        const ogResult = await OpenGraphMetadataSequelize.findOne({
-          where: {
-            UrlId: urlResult.dataValues.id,
-          },
-        });
-        res.status(200).json({
-          short_url: urlResult.dataValues.shortUrl,
-          title: ogResult?.dataValues.title,
-          description: ogResult?.dataValues.description,
-          image: ogResult?.dataValues.image,
-        });
-      } catch (error) {
-        console.warn({ error });
-        res.status(200).json({ short_url: urlResult.dataValues.shortUrl });
-      }
+      const ogData = await findOgData(
+        urlResult.dataValues.id,
+        urlResult.dataValues.shortUrl
+      );
+      res.status(200).json(ogData);
     } else {
-      // memo short url
-      const shortUrl = getShortUrl(url);
+      const newShortUrl = await createShortUrl(url, user?.dataValues.id);
 
-      try {
-        const id = user?.dataValues.id;
-        const urlContent: {
-          shortUrl: string;
-          originUrl: string;
-          times: number;
-          UserId: number | undefined;
-        } = {
-          shortUrl,
-          originUrl: url,
-          times: 0,
-          UserId: undefined,
-        };
-        if (id && Number.isInteger(parseInt(id, 10))) {
-          urlContent.UserId = parseInt(id, 10);
-        }
-
-        const urlResult = await UrlSequelize.create(urlContent);
-
-        let ogResult: OpenGraphMetadataTableContent | null = null;
-        // get ogData
-        try {
-          const { result: ogData } = await ogs({ url });
-          const image = ogData.ogImage;
-          ogResult = await OpenGraphMetadataSequelize.create({
-            title: ogData.ogTitle ?? "",
-            description: ogData.ogDescription ?? "",
-            image:
-              typeof image === "string"
-                ? image
-                : Array.isArray(image)
-                ? image[0].url
-                : image?.url ?? "",
-            isOrigin: true,
-            UrlId: urlResult.dataValues.id,
-          });
-        } catch (error) {
-          console.warn({ error });
-        }
-
-        res.status(200).json({
-          short_url: shortUrl,
-          title: ogResult?.dataValues.title,
-          description: ogResult?.dataValues.description,
-          image: ogResult?.dataValues.image,
-        });
-      } catch (error) {
-        console.warn(error);
-        res.status(400).json({ message: "There may be some wrong" });
+      if (newShortUrl) {
+        res.status(200).json(newShortUrl);
+      } else {
+        res
+          .status(400)
+          .json({ message: "There is wrong as creating short url" });
       }
     }
   } catch (error) {
