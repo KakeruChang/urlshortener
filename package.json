@@ -31,6 +31,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-redux": "^8.0.5",
+    "redis": "^4.6.5",
     "reflect-metadata": "^0.1.13",
     "sequelize": "^6.29.3",
     "sequelize-typescript": "^2.1.5",

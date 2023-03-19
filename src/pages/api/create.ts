@@ -1,10 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import { ResponseContent } from "@component/model/Common";
 import { OGContent } from "@component/model/Url";
-import { getAccountFromToken } from "@component/util/decode";
-import { getShortUrl } from "@component/util/hash";
-import type { NextApiRequest, NextApiResponse } from "next";
-import ogs from "open-graph-scraper";
 import sequelize, {
   UrlSequelize,
   URLTableContent,
@@ -12,7 +8,11 @@ import sequelize, {
   UserTableContent,
   OpenGraphMetadataSequelize,
   OpenGraphMetadataTableContent,
-} from "../../server/db";
+} from "@component/server/db";
+import { getAccountFromToken } from "@component/util/decode";
+import { getShortUrl } from "@component/util/hash";
+import type { NextApiRequest, NextApiResponse } from "next";
+import ogs from "open-graph-scraper";
 
 interface CreateShortUrlResponseContent extends ResponseContent, OGContent {
   short_url?: string;
