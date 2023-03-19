@@ -118,8 +118,9 @@ UrlSequelize.belongsTo(UserSequelize, {
     allowNull: true,
     name: "UserId",
   },
+  onDelete: "CASCADE",
 });
-OpenGraphMetadataSequelize.belongsTo(UrlSequelize);
+OpenGraphMetadataSequelize.belongsTo(UrlSequelize, { onDelete: "CASCADE" });
 
 sequelize.sync();
 

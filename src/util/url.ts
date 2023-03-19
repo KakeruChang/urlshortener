@@ -1,4 +1,4 @@
-import axios from "@component/axios";
+import axios from "@/axios";
 
 export async function checkURLIsValid(url: string): Promise<boolean> {
   if (typeof url !== "string") return false;

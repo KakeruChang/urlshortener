@@ -1,8 +1,8 @@
-import { OGContent } from "@component/model/Url";
+import { OGContent } from "@/model/Url";
 import sequelize, {
   OpenGraphMetadataSequelize,
   UrlSequelize,
-} from "@component/server/db";
+} from "@/server/db";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";

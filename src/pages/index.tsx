@@ -1,11 +1,12 @@
-import axios from "@component/axios";
-import Tooltip from "@component/components/Tooltip";
-import { selectUserName } from "@component/reducer/User";
-import { checkURLIsValid } from "@component/util/url";
+import axios from "@/axios";
+import Navbar from "@/components/Navbar";
+import Tooltip from "@/components/Tooltip";
+import useValidate from "@/hooks/useValidate";
+import { checkURLIsValid } from "@/util/url";
+import classNames from "classnames";
 import Head from "next/head";
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 
 interface ShortUrlOgContent {
   title?: string;
@@ -14,8 +15,6 @@ interface ShortUrlOgContent {
 }
 
 export default function Home() {
-  const userName = useSelector(selectUserName);
-
   const [url, setUrl] = useState("https://www.google.com.tw/");
   const [shortUrl, setShortUrl] = useState("");
   const [error, setError] = useState("");
@@ -60,6 +59,8 @@ export default function Home() {
     }
   }, [tooltipIsShow]);
 
+  useValidate();
+
   return (
     <>
       <Head>
@@ -68,11 +69,8 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <Navbar />
       <main className="px-24">
-        <Link href="/login" as="/login" className="link link-primary">
-          Login
-        </Link>
-        {userName ? `( ${userName} )` : null}
         <div className="flex w-full mt-24">
           <input
             type="text"
@@ -90,7 +88,7 @@ export default function Home() {
         {error ? <p className="text-error">{error}</p> : null}
         <div className="mt-12">
           <div className="flex">
-            <p>Your short url:</p>
+            <p className="font-bold">Your short url:</p>
           </div>
           {shortUrl ? (
             <>
@@ -98,7 +96,7 @@ export default function Home() {
                 <Link
                   href={shortUrl}
                   as={shortUrl}
-                  className="link link-primary"
+                  className="link link-primary font-bold"
                 >
                   {location.href + shortUrl}
                 </Link>
@@ -108,8 +106,13 @@ export default function Home() {
               </div>
               <div className="card w-96 bg-base-100 shadow-xl mt-12">
                 <figure>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={ogData.image} alt={ogData.title} />
+                  <div
+                    className={classNames(
+                      "w-[600px] h-[400px]",
+                      "bg-no-repeat bg-contain"
+                    )}
+                    style={{ backgroundImage: `url(${ogData.image})` }}
+                  />
                 </figure>
                 <div className="card-body">
                   <h2 className="card-title">{ogData.title}</h2>
