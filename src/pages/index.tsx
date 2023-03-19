@@ -1,12 +1,11 @@
 import axios from "@/axios";
+import Navbar from "@/components/Navbar";
 import Tooltip from "@/components/Tooltip";
-import { selectProfileData } from "@/reducer/User";
 import { checkURLIsValid } from "@/util/url";
 import classNames from "classnames";
 import Head from "next/head";
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 
 interface ShortUrlOgContent {
   title?: string;
@@ -15,8 +14,6 @@ interface ShortUrlOgContent {
 }
 
 export default function Home() {
-  const profile = useSelector(selectProfileData);
-
   const [url, setUrl] = useState("https://www.google.com.tw/");
   const [shortUrl, setShortUrl] = useState("");
   const [error, setError] = useState("");
@@ -69,11 +66,8 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <Navbar />
       <main className="px-24">
-        <Link href="/login" as="/login" className="link link-primary">
-          Login
-        </Link>
-        {profile ? `( ${profile.name} )` : null}
         <div className="flex w-full mt-24">
           <input
             type="text"
@@ -91,7 +85,7 @@ export default function Home() {
         {error ? <p className="text-error">{error}</p> : null}
         <div className="mt-12">
           <div className="flex">
-            <p>Your short url:</p>
+            <p className="font-bold">Your short url:</p>
           </div>
           {shortUrl ? (
             <>
@@ -99,7 +93,7 @@ export default function Home() {
                 <Link
                   href={shortUrl}
                   as={shortUrl}
-                  className="link link-primary"
+                  className="link link-primary font-bold"
                 >
                   {location.href + shortUrl}
                 </Link>

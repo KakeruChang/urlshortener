@@ -17,7 +17,6 @@ export interface loginThunkParams {
 export const loginThunk = createAsyncThunk<LoginAPIResult, loginThunkParams>(
   "login",
   async ({ input, mode }, context) => {
-    axios;
     try {
       const response = await axios.post<LoginAPIResult>(`/${mode}`, input);
       const { token, name } = response.data;
@@ -28,6 +27,28 @@ export const loginThunk = createAsyncThunk<LoginAPIResult, loginThunkParams>(
       return { token, name };
     } catch (error) {
       console.warn("loginThunk error", error);
+      return context.rejectWithValue((error as Error)?.message);
+    }
+  }
+);
+
+interface LogoutAPIResult {
+  token: string;
+}
+
+export const logoutThunk = createAsyncThunk<LogoutAPIResult, undefined>(
+  "logout",
+  async (_args, context) => {
+    try {
+      const response = await axios.get<LogoutAPIResult>("/logout");
+      const { token } = response.data;
+      if (typeof token === "string") {
+        setToken(token);
+      }
+
+      return { token };
+    } catch (error) {
+      console.warn("logoutThunk error", error);
       return context.rejectWithValue((error as Error)?.message);
     }
   }

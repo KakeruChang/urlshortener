@@ -4,6 +4,7 @@ import {
   deleteShortUrlThunk,
   getShortUrlsThunk,
   loginThunk,
+  logoutThunk,
   updateOgDataThunk,
 } from "@/thunks/UserThunk";
 import { createSlice } from "@reduxjs/toolkit";
@@ -47,7 +48,6 @@ export const userSlice = createSlice({
       .addCase(loginThunk.fulfilled, (state, { payload }) => {
         state.profile.token = payload.token;
         state.profile.name = payload.name;
-        state.profile.error = "";
       })
       .addCase(loginThunk.rejected, (state, { payload }) => {
         if (typeof payload === "string") {
@@ -55,6 +55,17 @@ export const userSlice = createSlice({
         } else {
           state.profile.error = "Some error happened at loginThunk.";
         }
+      })
+      .addCase(logoutThunk.pending, (state) => {
+        state.profile.error = "";
+      })
+      .addCase(logoutThunk.fulfilled, (state, { payload }) => {
+        state.profile.token = payload.token;
+        state.profile.name = "";
+      })
+      .addCase(logoutThunk.rejected, (state, { payload }) => {
+        state.profile.token = "";
+        state.profile.name = "";
       })
       .addCase(getShortUrlsThunk.pending, (state) => {
         state.member.error = "";

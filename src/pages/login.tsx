@@ -5,7 +5,6 @@ import { useAppDispatch } from "@/store";
 import { loginThunk } from "@/thunks/UserThunk";
 import classNames from "classnames";
 import Head from "next/head";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 import { useSelector } from "react-redux";
@@ -35,7 +34,7 @@ export default function LoginSignup() {
     )
       .unwrap()
       .then(() => {
-        router.push("/");
+        router.push("/member");
       })
       .catch((err) => {
         console.warn(err);
@@ -51,9 +50,6 @@ export default function LoginSignup() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="px-24">
-        <Link href="/" as="/" className="link link-primary">
-          Home
-        </Link>
         <div className="flex w-full mt-24 justify-center flex-col items-center">
           <div className="tabs mt-24 mb-4">
             {modeList.map((item) => (
