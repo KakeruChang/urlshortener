@@ -1,6 +1,6 @@
 import { ResponseContent } from "@/model/Common";
-import { NextApiRequest, NextApiResponse } from "next";
 import { revokeJWT } from "@/util/decode";
+import { NextApiRequest, NextApiResponse } from "next";
 
 interface LogoutResponseContent extends ResponseContent {
   token?: string;

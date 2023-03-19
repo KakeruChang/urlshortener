@@ -6,6 +6,7 @@ import {
   loginThunk,
   logoutThunk,
   updateOgDataThunk,
+  validateThunk,
 } from "@/thunks/UserThunk";
 import { createSlice } from "@reduxjs/toolkit";
 
@@ -104,6 +105,17 @@ export const userSlice = createSlice({
           state.member.error = payload;
         } else {
           state.member.error = "Some error happened at updateOgDataThunk.";
+        }
+      })
+      .addCase(validateThunk.fulfilled, (state, { payload }) => {
+        state.profile.name = payload;
+      })
+      .addCase(validateThunk.rejected, (state, { payload }) => {
+        state.profile.name = "";
+        if (typeof payload === "string") {
+          state.member.error = payload;
+        } else {
+          state.member.error = "Some error happened at validateThunk.";
         }
       });
   },

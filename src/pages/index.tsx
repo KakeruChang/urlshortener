@@ -1,6 +1,7 @@
 import axios from "@/axios";
 import Navbar from "@/components/Navbar";
 import Tooltip from "@/components/Tooltip";
+import useValidate from "@/hooks/useValidate";
 import { checkURLIsValid } from "@/util/url";
 import classNames from "classnames";
 import Head from "next/head";
@@ -57,6 +58,8 @@ export default function Home() {
       }, 5000);
     }
   }, [tooltipIsShow]);
+
+  useValidate();
 
   return (
     <>

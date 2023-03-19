@@ -112,3 +112,22 @@ export const updateOgDataThunk = createAsyncThunk<
     return context.rejectWithValue((error as Error)?.message);
   }
 });
+
+interface ValidateAPIResult {
+  name?: string;
+}
+
+export const validateThunk = createAsyncThunk<string, undefined>(
+  "validate",
+  async (_args, context) => {
+    try {
+      const response = await axios.get<ValidateAPIResult>("/validate");
+      const { name } = response.data;
+
+      return name ?? "";
+    } catch (error) {
+      console.warn("validateThunk error", error);
+      return context.rejectWithValue((error as Error)?.message);
+    }
+  }
+);
