@@ -1,7 +1,7 @@
-import axios from "@component/axios";
-import { MemberUrlContent } from "@component/model/Url";
-import { Mode, InputContent } from "@component/model/User";
-import { setToken } from "@component/util/storage";
+import axios from "@/axios";
+import { MemberUrlContent } from "@/model/Url";
+import { Mode, InputContent } from "@/model/User";
+import { setToken } from "@/util/storage";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 interface LoginAPIResult {

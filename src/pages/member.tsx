@@ -1,7 +1,7 @@
-import UpdateOgBlock from "@component/components/UpdateOgBlock";
-import { selectMemberData } from "@component/reducer/User";
-import { useAppDispatch } from "@component/store";
-import { getShortUrlsThunk } from "@component/thunks/UserThunk";
+import UpdateOgBlock from "@/components/UpdateOgBlock";
+import { selectMemberData } from "@/reducer/User";
+import { useAppDispatch } from "@/store";
+import { getShortUrlsThunk } from "@/thunks/UserThunk";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 

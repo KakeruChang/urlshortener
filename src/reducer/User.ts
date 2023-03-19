@@ -1,11 +1,11 @@
-import { SelectorRootState } from "@component/model/Common";
-import { MemberUrlContent } from "@component/model/Url";
+import { SelectorRootState } from "@/model/Common";
+import { MemberUrlContent } from "@/model/Url";
 import {
   deleteShortUrlThunk,
   getShortUrlsThunk,
   loginThunk,
   updateOgDataThunk,
-} from "@component/thunks/UserThunk";
+} from "@/thunks/UserThunk";
 import { createSlice } from "@reduxjs/toolkit";
 
 interface MemberContent {

@@ -1,8 +1,8 @@
-import TextInput from "@component/components/TextInput";
-import { Mode, InputContent } from "@component/model/User";
-import { selectProfileData } from "@component/reducer/User";
-import { useAppDispatch } from "@component/store";
-import { loginThunk } from "@component/thunks/UserThunk";
+import TextInput from "@/components/TextInput";
+import { Mode, InputContent } from "@/model/User";
+import { selectProfileData } from "@/reducer/User";
+import { useAppDispatch } from "@/store";
+import { loginThunk } from "@/thunks/UserThunk";
 import classNames from "classnames";
 import Head from "next/head";
 import Link from "next/link";

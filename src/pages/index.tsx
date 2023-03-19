@@ -1,7 +1,7 @@
-import axios from "@component/axios";
-import Tooltip from "@component/components/Tooltip";
-import { selectProfileData } from "@component/reducer/User";
-import { checkURLIsValid } from "@component/util/url";
+import axios from "@/axios";
+import Tooltip from "@/components/Tooltip";
+import { selectProfileData } from "@/reducer/User";
+import { checkURLIsValid } from "@/util/url";
 import classNames from "classnames";
 import Head from "next/head";
 import Link from "next/link";

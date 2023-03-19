@@ -1,4 +1,4 @@
-import { ResponseContent } from "@component/model/Common";
+import { ResponseContent } from "@/model/Common";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 interface CheckUrlResponseContent extends ResponseContent {

@@ -1,9 +1,6 @@
-import { MemberUrlContent } from "@component/model/Url";
-import { useAppDispatch } from "@component/store";
-import {
-  deleteShortUrlThunk,
-  updateOgDataThunk,
-} from "@component/thunks/UserThunk";
+import { MemberUrlContent } from "@/model/Url";
+import { useAppDispatch } from "@/store";
+import { deleteShortUrlThunk, updateOgDataThunk } from "@/thunks/UserThunk";
 import classNames from "classnames";
 import { useState } from "react";
 import TextInput from "./TextInput";

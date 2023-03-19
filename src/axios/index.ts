@@ -1,4 +1,4 @@
-import { getToken } from "@component/util/storage";
+import { getToken } from "@/util/storage";
 import axios from "axios";
 
 const axiosInstance = axios.create({

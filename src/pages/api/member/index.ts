@@ -1,11 +1,11 @@
-import { ResponseContent } from "@component/model/Common";
-import sequelize from "@component/server/db";
+import { ResponseContent } from "@/model/Common";
+import sequelize from "@/server/db";
 import {
   getUrlWithOgByAccount,
   updateOgData,
   URLJoinObContent,
-} from "@component/server/method";
-import { getAccountFromToken } from "@component/util/decode";
+} from "@/server/method";
+import { getAccountFromToken } from "@/util/decode";
 import { NextApiRequest, NextApiResponse } from "next";
 
 interface MemberResponseContent extends ResponseContent {

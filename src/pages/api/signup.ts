@@ -1,8 +1,8 @@
+import { ResponseContent } from "@/model/Common";
+import sequelize, { UserSequelize } from "@/server/db";
 import { NextApiRequest, NextApiResponse } from "next";
 import { hash } from "bcryptjs";
 import jwt from "jsonwebtoken";
-import sequelize, { UserSequelize } from "../../server/db";
-import { ResponseContent } from "@component/model/Common";
 
 interface SignupResponseContent extends ResponseContent {
   token?: string;

@@ -1,6 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import { ResponseContent } from "@component/model/Common";
-import { OGContent } from "@component/model/Url";
+import { ResponseContent } from "@/model/Common";
+import { OGContent } from "@/model/Url";
 import sequelize, {
   UrlSequelize,
   URLTableContent,
@@ -8,9 +8,9 @@ import sequelize, {
   UserTableContent,
   OpenGraphMetadataSequelize,
   OpenGraphMetadataTableContent,
-} from "@component/server/db";
-import { getAccountFromToken } from "@component/util/decode";
-import { getShortUrl } from "@component/util/hash";
+} from "@/server/db";
+import { getAccountFromToken } from "@/util/decode";
+import { getShortUrl } from "@/util/hash";
 import type { NextApiRequest, NextApiResponse } from "next";
 import ogs from "open-graph-scraper";
 

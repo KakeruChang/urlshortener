@@ -1,5 +1,5 @@
-import { ResponseContent } from "@component/model/Common";
-import sequelize, { UrlSequelize } from "@component/server/db";
+import { ResponseContent } from "@/model/Common";
+import sequelize, { UrlSequelize } from "@/server/db";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { createClient } from "redis";
 
