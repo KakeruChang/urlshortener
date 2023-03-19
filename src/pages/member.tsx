@@ -36,6 +36,7 @@ export default function Member() {
             shortUrl={url.shortUrl}
             title={url.title}
             description={url.description}
+            times={url.times}
             image={url.image}
             key={url.shortUrl}
           />

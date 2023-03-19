@@ -2,7 +2,7 @@ import axios from "@/axios";
 import Navbar from "@/components/Navbar";
 import Tooltip from "@/components/Tooltip";
 import useValidate from "@/hooks/useValidate";
-import { checkURLIsValid } from "@/util/url";
+import { checkURLIsValid, getBasicUrl } from "@/util/url";
 import classNames from "classnames";
 import Head from "next/head";
 import Link from "next/link";
@@ -15,7 +15,7 @@ interface ShortUrlOgContent {
 }
 
 export default function Home() {
-  const [url, setUrl] = useState("https://www.google.com.tw/");
+  const [url, setUrl] = useState("");
   const [shortUrl, setShortUrl] = useState("");
   const [error, setError] = useState("");
   const [tooltipIsShow, setTooltipIsShow] = useState(false);
@@ -46,7 +46,7 @@ export default function Home() {
 
   useEffect(() => {
     if (shortUrl) {
-      navigator.clipboard.writeText(location.href + shortUrl);
+      navigator.clipboard.writeText(getBasicUrl() + shortUrl);
       setTooltipIsShow(true);
     }
   }, [shortUrl]);
@@ -98,7 +98,7 @@ export default function Home() {
                   as={shortUrl}
                   className="link link-primary font-bold"
                 >
-                  {location.href + shortUrl}
+                  {getBasicUrl() + shortUrl}
                 </Link>
                 <Tooltip content="copied" isShow={tooltipIsShow}>
                   <div />

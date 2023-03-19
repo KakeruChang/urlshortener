@@ -1,6 +1,7 @@
 import { MemberUrlContent } from "@/model/Url";
 import { useAppDispatch } from "@/store";
 import { deleteShortUrlThunk, updateOgDataThunk } from "@/thunks/UserThunk";
+import { getBasicUrl } from "@/util/url";
 import classNames from "classnames";
 import { useState } from "react";
 import TextInput from "./TextInput";
@@ -10,6 +11,7 @@ export default function UpdateOgBlock({
   title,
   description,
   image,
+  times,
 }: MemberUrlContent) {
   const dispatch = useAppDispatch();
   const [ogData, setOgData] = useState({
@@ -38,7 +40,12 @@ export default function UpdateOgBlock({
   return (
     <div className="collapse collapse-arrow border border-base-300 bg-base-100 rounded-box mb-12">
       <input type="checkbox" />
-      <div className="collapse-title text-xl font-medium">{shortUrl}</div>
+      <div className="collapse-title text-xl font-medium">
+        {getBasicUrl() + shortUrl}
+        <div className="badge badge-secondary badge-outline ml-6">{`number of uses: ${
+          times ?? 0
+        }`}</div>
+      </div>
       <div className="collapse-content">
         <div className="flex">
           <button

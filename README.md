@@ -36,6 +36,7 @@ After entering a URL directly into the input and clicking the send button, a sho
 - Delete short URL.
 - Edit Open Graph Metadata for the short URL.
 - Add Redis to prevent frequent database queries when redirecting.
+- Display number of uses.
 
 ## Run
 
