@@ -15,3 +15,8 @@ export async function checkURLIsValid(url: string): Promise<boolean> {
 
   return !!result.is_valid;
 }
+
+export function getBasicUrl() {
+  const url = new URL(location.href);
+  return `${url.origin}/`;
+}

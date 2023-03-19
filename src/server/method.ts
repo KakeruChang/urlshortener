@@ -7,6 +7,7 @@ import {
 
 export interface URLJoinObContent {
   shortUrl: string;
+  times: number;
   OpenGraphMetadatum?: {
     title?: string;
     description?: string;
@@ -30,6 +31,7 @@ export async function getUrlWithOgByAccount(accountFromToken: string) {
     )
     .map((item) => ({
       shortUrl: item.shortUrl,
+      times: item.times,
       title: item.OpenGraphMetadatum?.title,
       description: item.OpenGraphMetadatum?.description,
       image: item.OpenGraphMetadatum?.image,

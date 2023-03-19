@@ -28,4 +28,5 @@ export interface OGContent {
 
 export interface MemberUrlContent extends OGContent {
   shortUrl: string;
+  times: number;
 }
