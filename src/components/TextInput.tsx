@@ -11,7 +11,7 @@ interface TextInputProps {
 
 export default function TextInput({
   type = "text",
-  disabled = false,
+  disabled,
   value,
   onChange,
   id,
