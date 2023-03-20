@@ -6,10 +6,12 @@ interface TextInputProps {
   id: string;
   placeholder?: string;
   type?: HTMLInputTypeAttribute;
+  disabled?: boolean;
 }
 
 export default function TextInput({
   type = "text",
+  disabled,
   value,
   onChange,
   id,
@@ -21,6 +23,7 @@ export default function TextInput({
         <span className="label-text">{id}</span>
       </label>
       <input
+        disabled={disabled}
         type={type}
         id={id}
         placeholder={placeholder}

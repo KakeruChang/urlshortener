@@ -19,7 +19,8 @@ export default function UpdateOgBlock({
     description: description ?? "",
     image: image ?? "",
   });
-  const submittable = ogData.title && ogData.description && ogData.image;
+  const [isEditing, setIsEditing] = useState(false);
+  const submittable = !!(ogData.title && ogData.description && ogData.image);
 
   const deleteShortUrl = () => {
     const result = confirm("Are you sure to delete this short url?");
@@ -29,10 +30,16 @@ export default function UpdateOgBlock({
   };
 
   const updateOgData = () => {
-    if (submittable) {
-      const result = confirm("Are you sure to update this og data?");
-      if (result) {
-        dispatch(updateOgDataThunk({ shortUrl, ...ogData }));
+    if (!isEditing) {
+      setIsEditing(true);
+    } else {
+      if (submittable) {
+        const result = confirm("Are you sure to update this og data?");
+        if (result) {
+          dispatch(updateOgDataThunk({ shortUrl, ...ogData })).finally(() => {
+            setIsEditing(false);
+          });
+        }
       }
     }
   };
@@ -56,8 +63,12 @@ export default function UpdateOgBlock({
           >
             Delete
           </button>
-          <button className="btn btn-accent" onClick={updateOgData}>
-            Update
+          <button
+            className="btn btn-accent"
+            onClick={updateOgData}
+            disabled={!submittable}
+          >
+            {isEditing ? "Update" : "Edit"}
           </button>
         </div>
         <TextInput
@@ -66,6 +77,7 @@ export default function UpdateOgBlock({
           onChange={(newInput) => {
             setOgData((prev) => ({ ...prev, title: newInput }));
           }}
+          disabled={!isEditing}
         />
         <TextInput
           id="ogDescription"
@@ -73,6 +85,7 @@ export default function UpdateOgBlock({
           onChange={(newInput) => {
             setOgData((prev) => ({ ...prev, description: newInput }));
           }}
+          disabled={!isEditing}
         />
         <TextInput
           id="ogImage"
@@ -80,6 +93,7 @@ export default function UpdateOgBlock({
           onChange={(newInput) => {
             setOgData((prev) => ({ ...prev, image: newInput }));
           }}
+          disabled={!isEditing}
         />
         <div
           className={classNames(
