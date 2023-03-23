@@ -16,6 +16,9 @@ Second, apply changes of package:
 yarn patch-package
 ```
 
+Set environment variables
+`DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASS`, `DB_NAME`, `JWT_SECRET_KEY`,
+
 Last, run the development server:
 
 ```bash
