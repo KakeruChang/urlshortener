@@ -16,7 +16,11 @@ interface MemberContent {
 }
 
 interface ProfileContent {
-  name: string;
+  user: {
+    name: string;
+    account: string;
+    id: string;
+  } | null;
   token: string;
   error: string;
 }
@@ -27,7 +31,7 @@ export interface UserState {
 
 const initialState: UserState = {
   profile: {
-    name: "",
+    user: null,
     token: "",
     error: "",
   },
@@ -48,7 +52,7 @@ export const userSlice = createSlice({
       })
       .addCase(loginThunk.fulfilled, (state, { payload }) => {
         state.profile.token = payload.token;
-        state.profile.name = payload.name;
+        state.profile.user = payload.user;
       })
       .addCase(loginThunk.rejected, (state, { payload }) => {
         if (typeof payload === "string") {
@@ -59,14 +63,8 @@ export const userSlice = createSlice({
       })
       .addCase(logoutThunk.pending, (state) => {
         state.profile.error = "";
-      })
-      .addCase(logoutThunk.fulfilled, (state, { payload }) => {
-        state.profile.token = payload.token;
-        state.profile.name = "";
-      })
-      .addCase(logoutThunk.rejected, (state, { payload }) => {
         state.profile.token = "";
-        state.profile.name = "";
+        state.profile.user = null;
       })
       .addCase(getShortUrlsThunk.pending, (state) => {
         state.member.error = "";
@@ -108,10 +106,15 @@ export const userSlice = createSlice({
         }
       })
       .addCase(validateThunk.fulfilled, (state, { payload }) => {
-        state.profile.name = payload;
+        const user = payload;
+        if (!user) {
+          state.profile.user = null;
+        } else {
+          state.profile.user = payload;
+        }
       })
       .addCase(validateThunk.rejected, (state, { payload }) => {
-        state.profile.name = "";
+        state.profile.user = null;
         if (typeof payload === "string") {
           state.member.error = payload;
         } else {

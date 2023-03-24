@@ -22,10 +22,10 @@ export default function Member() {
   }, [dispatch]);
 
   useEffect(() => {
-    if (!profile.name) {
+    if (!profile.user) {
       router.push("/");
     }
-  }, [profile.name, router]);
+  }, [profile.user, router]);
 
   return (
     <>

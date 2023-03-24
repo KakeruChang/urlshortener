@@ -1,8 +1,11 @@
-export interface User {
+export interface UserWithoutPWD {
   name: string;
   account: string;
-  password: string;
   id: string;
+}
+
+export interface User extends UserWithoutPWD {
+  password: string;
 }
 
 export type Mode = "login" | "signup";

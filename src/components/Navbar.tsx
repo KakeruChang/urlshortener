@@ -27,7 +27,7 @@ export default function Navbar() {
         <Link href="/" as="/" className="btn btn-ghost normal-case text-xl">
           Home
         </Link>
-        {profile.name ? (
+        {profile.user ? (
           <>
             <Link
               href="/member"
@@ -36,7 +36,7 @@ export default function Navbar() {
             >
               Member
             </Link>
-            <span className="ml-6">Hi,{profile.name}~</span>
+            <span className="ml-6">Hi,{profile.user.name}~</span>
           </>
         ) : null}
       </div>
@@ -44,7 +44,7 @@ export default function Navbar() {
         <h1 className="text-3xl font-black">URL Shortener</h1>
       </div>
       <div className="navbar-end">
-        {profile.name ? (
+        {profile.user ? (
           <button className="btn" onClick={logoutHandler}>
             Log out
           </button>

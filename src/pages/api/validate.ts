@@ -1,10 +1,11 @@
 import { ResponseContent } from "@/model/Common";
+import { UserWithoutPWD } from "@/model/User";
 import sequelize, { UserSequelize } from "@/server/db";
 import { getAccountFromToken } from "@/util/decode";
 import { NextApiRequest, NextApiResponse } from "next";
 
 interface ValidateResponseContent extends ResponseContent {
-  name?: string;
+  user?: UserWithoutPWD;
 }
 
 export default async function handler(
@@ -21,9 +22,13 @@ export default async function handler(
       const user = await UserSequelize.findOne({ where: { account } });
 
       if (user) {
-        return res
-          .status(200)
-          .json({ name: user.dataValues.name ?? user.dataValues.account });
+        return res.status(200).json({
+          user: {
+            name: user.dataValues.name ?? user.dataValues.account,
+            account: user.dataValues.account,
+            id: user.dataValues.id,
+          },
+        });
       }
       return res.status(400).json({ message: "User not exist" });
     } catch (error) {
