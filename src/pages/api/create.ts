@@ -3,7 +3,7 @@ import { ResponseContent } from "@/model/Common";
 import { OGContent } from "@/model/Url";
 import sequelize from "@/server/db";
 import { createShortUrl, findOgData, findUrl, findUser } from "@/server/method";
-import { getAccountFromToken, client, connectToRedis } from "@/util/decode";
+import TokenManager from "@/util/token";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 interface CreateShortUrlResponseContent extends ResponseContent, OGContent {
@@ -23,8 +23,7 @@ export default async function handler(
       url: string;
     };
 
-    await connectToRedis(client);
-    const accountFromToken = await getAccountFromToken(req, client);
+    const accountFromToken = await TokenManager.getAccountFromToken(req);
 
     await sequelize.authenticate();
 

@@ -1,5 +1,5 @@
 import { ResponseContent } from "@/model/Common";
-import { revokeJWT, client, connectToRedis } from "@/util/decode";
+import TokenManager from "@/util/token";
 import { NextApiRequest, NextApiResponse } from "next";
 
 interface LogoutResponseContent extends ResponseContent {
@@ -15,8 +15,7 @@ export default async function handler(
   }
 
   try {
-    await connectToRedis(client);
-    await revokeJWT(req, client);
+    await TokenManager.revoke(req);
     res.status(204);
   } catch (error) {
     res.status(400).json({ message: "Log out failed!" });

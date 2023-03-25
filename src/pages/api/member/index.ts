@@ -5,7 +5,7 @@ import {
   updateOgData,
   URLJoinObContent,
 } from "@/server/method";
-import { getAccountFromToken, client, connectToRedis } from "@/util/decode";
+import TokenManager from "@/util/token";
 import { NextApiRequest, NextApiResponse } from "next";
 
 interface MemberResponseContent extends ResponseContent {
@@ -19,8 +19,7 @@ export default async function handler(
   try {
     await sequelize.authenticate();
 
-    await connectToRedis(client);
-    const accountFromToken = await getAccountFromToken(req, client);
+    const accountFromToken = await TokenManager.getAccountFromToken(req);
 
     if (accountFromToken) {
       if (req.method === "GET") {
