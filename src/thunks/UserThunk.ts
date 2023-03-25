@@ -124,6 +124,7 @@ export const validateThunk = createAsyncThunk<
     return user;
   } catch (error) {
     console.warn("validateThunk error", error);
+    setToken("");
     return context.rejectWithValue((error as Error)?.message);
   }
 });

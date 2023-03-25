@@ -1,7 +1,7 @@
 import { ResponseContent } from "@/model/Common";
 import { UserWithoutPWD } from "@/model/User";
 import sequelize, { UserSequelize } from "@/server/db";
-import { getAccountFromToken } from "@/util/decode";
+import { getAccountFromToken, client, connectToRedis } from "@/util/decode";
 import { NextApiRequest, NextApiResponse } from "next";
 
 interface ValidateResponseContent extends ResponseContent {
@@ -15,7 +15,10 @@ export default async function handler(
   if (req.method !== "GET") {
     return res.status(405).json({ message: "Invalid request method" });
   }
-  const account = getAccountFromToken(req);
+
+  await connectToRedis(client);
+  const account = await getAccountFromToken(req, client);
+
   if (account) {
     try {
       await sequelize.authenticate();
