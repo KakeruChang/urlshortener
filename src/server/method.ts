@@ -208,7 +208,7 @@ export async function findUser(account: string | undefined) {
 }
 
 export async function validateLogin(account: string, password: string) {
-  let isValid = true;
+  let isValid = false;
 
   const user = await UserSequelize.findOne({ where: { account } });
 

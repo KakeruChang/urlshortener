@@ -1,12 +1,12 @@
 import axios from "@/axios";
 import { MemberUrlContent } from "@/model/Url";
-import { Mode, InputContent, UserWithoutPWD } from "@/model/User";
+import { Mode, InputContent, UserData } from "@/model/User";
 import { getToken, setToken } from "@/util/storage";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 interface LoginAPIResult {
   token: string;
-  user: UserWithoutPWD;
+  user: UserData;
 }
 
 export interface loginThunkParams {
@@ -107,24 +107,24 @@ export const updateOgDataThunk = createAsyncThunk<
 });
 
 interface ValidateAPIResult {
-  user?: UserWithoutPWD;
+  user?: UserData;
 }
 
-export const validateThunk = createAsyncThunk<
-  UserWithoutPWD | undefined,
-  undefined
->("validate", async (_args, context) => {
-  try {
-    const token = getToken();
-    if (!token) return undefined;
+export const validateThunk = createAsyncThunk<UserData | undefined, undefined>(
+  "validate",
+  async (_args, context) => {
+    try {
+      const token = getToken();
+      if (!token) return undefined;
 
-    const response = await axios.get<ValidateAPIResult>("/validate");
-    const user = response.data.user;
+      const response = await axios.get<ValidateAPIResult>("/validate");
+      const user = response.data.user;
 
-    return user;
-  } catch (error) {
-    console.warn("validateThunk error", error);
-    setToken("");
-    return context.rejectWithValue((error as Error)?.message);
+      return user;
+    } catch (error) {
+      console.warn("validateThunk error", error);
+      setToken("");
+      return context.rejectWithValue((error as Error)?.message);
+    }
   }
-});
+);

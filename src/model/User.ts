@@ -1,10 +1,10 @@
-export interface UserWithoutPWD {
+export interface UserData {
   name: string;
   account: string;
   id: string;
 }
 
-export interface User extends UserWithoutPWD {
+export interface User extends UserData {
   password: string;
 }
 

@@ -8,7 +8,7 @@ interface LogoutResponseContent extends ResponseContent {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<LogoutResponseContent>
+  res: NextApiResponse<LogoutResponseContent | undefined>
 ) {
   if (req.method !== "GET") {
     return res.status(405).json({ message: "Invalid request method" });
@@ -16,7 +16,7 @@ export default async function handler(
 
   try {
     await TokenManager.revoke(req);
-    res.status(204).send();
+    res.status(204).send(undefined);
   } catch (error) {
     res.status(400).json({ message: "Log out failed!" });
   }

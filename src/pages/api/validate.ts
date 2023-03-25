@@ -1,11 +1,11 @@
 import { ResponseContent } from "@/model/Common";
-import { UserWithoutPWD } from "@/model/User";
+import { UserData } from "@/model/User";
 import sequelize, { UserSequelize } from "@/server/db";
 import TokenManager from "@/util/token";
 import { NextApiRequest, NextApiResponse } from "next";
 
 interface ValidateResponseContent extends ResponseContent {
-  user?: UserWithoutPWD;
+  user?: UserData;
 }
 
 export default async function handler(

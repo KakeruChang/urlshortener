@@ -2,12 +2,12 @@ import { ResponseContent } from "@/model/Common";
 import sequelize from "@/server/db";
 import { NextApiRequest, NextApiResponse } from "next";
 import jwt from "jsonwebtoken";
-import { UserWithoutPWD } from "@/model/User";
+import { UserData } from "@/model/User";
 import { validateLogin } from "@/server/method";
 
 interface LoginResponseContent extends ResponseContent {
   token?: string;
-  user?: UserWithoutPWD;
+  user?: UserData;
 }
 
 export default async function handler(

@@ -17,7 +17,7 @@ yarn patch-package
 ```
 
 Set environment variables
-`DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASS`, `DB_NAME`, `JWT_SECRET_KEY`
+`DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASS`, `DB_NAME`, `JWT_SECRET_KEY`, `FAKE_USER_AGENT`
 
 Last, run the development server:
 

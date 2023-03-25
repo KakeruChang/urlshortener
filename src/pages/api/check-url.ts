@@ -7,7 +7,7 @@ interface CheckUrlResponseContent extends ResponseContent {
 }
 
 const fakeUserAgent =
-  "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.81 Safari/537.36";
+  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36 Edge/16.16299";
 
 export default async function handler(
   req: NextApiRequest,
@@ -31,7 +31,7 @@ export default async function handler(
 
     try {
       const response = await axios.get(url, {
-        headers: { "User-Agent": fakeUserAgent },
+        headers: { "User-Agent": process.env.FAKE_USER_AGENT ?? fakeUserAgent },
       });
       res.status(200).json({ is_valid: response.status === 200 });
     } catch (error) {
