@@ -1,7 +1,7 @@
 import { ResponseContent } from "@/model/Common";
 import sequelize, { UrlSequelize } from "@/server/db";
 import { getUrlWithOgByAccount, URLJoinObContent } from "@/server/method";
-import { getAccountFromToken } from "@/util/decode";
+import TokenManager from "@/util/token";
 import { NextApiRequest, NextApiResponse } from "next";
 
 interface MemberResponseContent extends ResponseContent {
@@ -15,7 +15,7 @@ export default async function handler(
   try {
     await sequelize.authenticate();
 
-    const accountFromToken = getAccountFromToken(req);
+    const accountFromToken = await TokenManager.getAccountFromToken(req);
 
     if (accountFromToken) {
       if (req.method !== "DELETE") {

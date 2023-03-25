@@ -1,12 +1,13 @@
 import { ResponseContent } from "@/model/Common";
-import sequelize, { UserSequelize } from "@/server/db";
+import sequelize from "@/server/db";
 import { NextApiRequest, NextApiResponse } from "next";
-import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { UserData } from "@/model/User";
+import { validateLogin } from "@/server/method";
 
 interface LoginResponseContent extends ResponseContent {
   token?: string;
-  name?: string;
+  user?: UserData;
 }
 
 export default async function handler(
@@ -21,14 +22,9 @@ export default async function handler(
 
     const { account, password } = req.body;
 
-    const user = await UserSequelize.findOne({ where: { account } });
+    const { isValid, user } = await validateLogin(account, password);
 
-    if (!user) {
-      return res.status(401).json({ message: "Invalid credentials" });
-    }
-
-    const isMatch = await bcrypt.compare(password, user.dataValues.password);
-    if (!isMatch) {
+    if (!isValid || !user) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
@@ -45,7 +41,9 @@ export default async function handler(
       expiresIn: "1h",
     });
 
-    return res.status(200).json({ token, name: name ?? userAccount });
+    return res
+      .status(200)
+      .json({ token, user: { id, name, account: userAccount } });
   } catch (error) {
     console.error("Unable to connect to the database:", error);
   }

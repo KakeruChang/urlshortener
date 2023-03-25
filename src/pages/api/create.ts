@@ -3,7 +3,7 @@ import { ResponseContent } from "@/model/Common";
 import { OGContent } from "@/model/Url";
 import sequelize from "@/server/db";
 import { createShortUrl, findOgData, findUrl, findUser } from "@/server/method";
-import { getAccountFromToken } from "@/util/decode";
+import TokenManager from "@/util/token";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 interface CreateShortUrlResponseContent extends ResponseContent, OGContent {
@@ -15,8 +15,6 @@ export default async function handler(
   res: NextApiResponse<CreateShortUrlResponseContent>
 ) {
   try {
-    await sequelize.authenticate();
-
     if (req.method !== "POST") {
       return res.status(405).json({ message: "Invalid request method" });
     }
@@ -25,7 +23,10 @@ export default async function handler(
       url: string;
     };
 
-    const accountFromToken = getAccountFromToken(req);
+    const accountFromToken = await TokenManager.getAccountFromToken(req);
+
+    await sequelize.authenticate();
+
     const user = await findUser(accountFromToken);
     const urlResult = await findUrl(url, user?.dataValues.id);
 

@@ -1,12 +1,12 @@
 import axios from "@/axios";
 import { MemberUrlContent } from "@/model/Url";
-import { Mode, InputContent } from "@/model/User";
-import { setToken } from "@/util/storage";
+import { Mode, InputContent, UserData } from "@/model/User";
+import { getToken, setToken } from "@/util/storage";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 interface LoginAPIResult {
   token: string;
-  name: string;
+  user: UserData;
 }
 
 export interface loginThunkParams {
@@ -19,12 +19,12 @@ export const loginThunk = createAsyncThunk<LoginAPIResult, loginThunkParams>(
   async ({ input, mode }, context) => {
     try {
       const response = await axios.post<LoginAPIResult>(`/${mode}`, input);
-      const { token, name } = response.data;
+      const { token, user } = response.data;
       if (typeof token === "string") {
         setToken(token);
       }
 
-      return { token, name };
+      return { token, user };
     } catch (error) {
       console.warn("loginThunk error", error);
       return context.rejectWithValue((error as Error)?.message);
@@ -32,21 +32,14 @@ export const loginThunk = createAsyncThunk<LoginAPIResult, loginThunkParams>(
   }
 );
 
-interface LogoutAPIResult {
-  token: string;
-}
-
-export const logoutThunk = createAsyncThunk<LogoutAPIResult, undefined>(
+export const logoutThunk = createAsyncThunk<undefined, undefined>(
   "logout",
   async (_args, context) => {
     try {
-      const response = await axios.get<LogoutAPIResult>("/logout");
-      const { token } = response.data;
-      if (typeof token === "string") {
-        setToken(token);
-      }
+      setToken("");
+      await axios.get("/logout");
 
-      return { token };
+      return undefined;
     } catch (error) {
       console.warn("logoutThunk error", error);
       return context.rejectWithValue((error as Error)?.message);
@@ -114,19 +107,23 @@ export const updateOgDataThunk = createAsyncThunk<
 });
 
 interface ValidateAPIResult {
-  name?: string;
+  user?: UserData;
 }
 
-export const validateThunk = createAsyncThunk<string, undefined>(
+export const validateThunk = createAsyncThunk<UserData | undefined, undefined>(
   "validate",
   async (_args, context) => {
     try {
-      const response = await axios.get<ValidateAPIResult>("/validate");
-      const { name } = response.data;
+      const token = getToken();
+      if (!token) return undefined;
 
-      return name ?? "";
+      const response = await axios.get<ValidateAPIResult>("/validate");
+      const user = response.data.user;
+
+      return user;
     } catch (error) {
       console.warn("validateThunk error", error);
+      setToken("");
       return context.rejectWithValue((error as Error)?.message);
     }
   }

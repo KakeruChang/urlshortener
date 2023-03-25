@@ -1,4 +1,5 @@
 import { getShortUrl } from "@/util/hash";
+import bcrypt from "bcryptjs";
 import ogs from "open-graph-scraper";
 import {
   UserSequelize,
@@ -204,4 +205,18 @@ export async function findUser(account: string | undefined) {
     }
   }
   return user;
+}
+
+export async function validateLogin(account: string, password: string) {
+  let isValid = false;
+
+  const user = await UserSequelize.findOne({ where: { account } });
+
+  if (!user) {
+    isValid = false;
+  } else {
+    isValid = await bcrypt.compare(password, user.dataValues.password);
+  }
+
+  return { isValid, user };
 }

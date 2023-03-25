@@ -3,10 +3,11 @@ import sequelize, { UserSequelize } from "@/server/db";
 import { NextApiRequest, NextApiResponse } from "next";
 import { hash } from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { UserData } from "@/model/User";
 
 interface SignupResponseContent extends ResponseContent {
   token?: string;
-  name?: string;
+  user?: UserData;
 }
 
 export default async function handler(
@@ -49,11 +50,14 @@ export default async function handler(
       name: name ?? account,
     });
 
-    const token = jwt.sign({ id: newUser.dataValues.id, account }, secretKey, {
+    const token = jwt.sign({ account, id: newUser.dataValues.id }, secretKey, {
       expiresIn: "1h",
     });
 
-    return res.status(201).json({ token, name: name ?? account });
+    return res.status(201).json({
+      token,
+      user: { account, id: newUser.dataValues.id, name: name ?? account },
+    });
   } catch (error) {
     console.error("Unable to connect to the database:", error);
   }
