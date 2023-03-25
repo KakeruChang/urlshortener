@@ -9,6 +9,7 @@ export default function Navbar() {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const profile = useSelector(selectProfileData);
+  const isLoggedIn = !!profile.user;
 
   const logoutHandler = () => {
     dispatch(logoutThunk())
@@ -44,7 +45,7 @@ export default function Navbar() {
         <h1 className="text-3xl font-black">URL Shortener</h1>
       </div>
       <div className="navbar-end">
-        {profile.user ? (
+        {isLoggedIn ? (
           <button className="btn" onClick={logoutHandler}>
             Log out
           </button>

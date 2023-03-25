@@ -11,7 +11,7 @@ export default function Member() {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const shortUrlList = useSelector(selectMemberData).urls;
-  const profile = useSelector(selectProfileData);
+  const isLoggedIn = !!useSelector(selectProfileData).user;
 
   useEffect(() => {
     dispatch(getShortUrlsThunk())
@@ -22,10 +22,10 @@ export default function Member() {
   }, [dispatch]);
 
   useEffect(() => {
-    if (!profile.user) {
+    if (!isLoggedIn) {
       router.push("/");
     }
-  }, [profile.user, router]);
+  }, [isLoggedIn, router]);
 
   return (
     <>
