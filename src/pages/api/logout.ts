@@ -16,7 +16,7 @@ export default async function handler(
 
   try {
     await TokenManager.revoke(req);
-    res.status(204);
+    res.status(204).send();
   } catch (error) {
     res.status(400).json({ message: "Log out failed!" });
   }
